@@ -19,12 +19,12 @@ echo "=================================================="
 if [ -z "$1" ]; then
     echo -e "${RED}Error: GitHub username required${NC}"
     echo "Usage: ./deploy.sh <github-username> [repository-name]"
-    echo "Example: ./deploy.sh blurboy1985 trading-use-cases"
+    echo "Example: ./deploy.sh blurboy1985 openclaw-trading"
     exit 1
 fi
 
 GITHUB_USERNAME=$1
-REPO_NAME=${2:-trading-use-cases}
+REPO_NAME=${2:-openclaw-trading}
 REPO_URL="https://github.com/${GITHUB_USERNAME}/${REPO_NAME}.git"
 
 echo -e "${YELLOW}GitHub Username:${NC} ${GITHUB_USERNAME}"
@@ -40,7 +40,7 @@ fi
 
 # Check if we're in the right directory
 if [ ! -f "index.html" ]; then
-    echo -e "${RED}Error: index.html not found. Please run this script from the trading-use-cases directory.${NC}"
+    echo -e "${RED}Error: index.html not found. Please run this script from the openclaw-trading directory.${NC}"
     exit 1
 fi
 
@@ -79,9 +79,9 @@ if git ls-remote "$REPO_URL" &> /dev/null; then
         git clone "$REPO_URL" . 2>/dev/null || true
         
         # Copy our files over
-        cp /home/danielquek/.openclaw/workspace/trading-use-cases/index.html .
-        cp /home/danielquek/.openclaw/workspace/trading-use-cases/README.md .
-        cp /home/danielquek/.openclaw/workspace/trading-use-cases/deploy.sh .
+        cp /home/danielquek/.openclaw/workspace/openclaw-trading/index.html .
+        cp /home/danielquek/.openclaw/workspace/openclaw-trading/README.md .
+        cp /home/danielquek/.openclaw/workspace/openclaw-trading/deploy.sh .
     fi
 else
     echo -e "${YELLOW}Repository does not exist on GitHub yet. It will be created on first push.${NC}"

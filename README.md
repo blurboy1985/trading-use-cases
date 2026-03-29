@@ -2,7 +2,7 @@
 
 A comprehensive, searchable catalogue of real-world and potential use cases for OpenClaw AI agents in trading, portfolio management, and financial automation.
 
-**🌐 Live Site:** [View the catalogue](https://openclaw.github.io/trading-use-cases/)
+**🌐 Live Site:** [View the catalogue](https://blurboy1985.github.io/trading-use-cases/)
 
 ---
 
@@ -46,13 +46,13 @@ This site is designed to be deployed as a GitHub Pages static site. Here's how:
 
 ### Option 1: Manual Deployment
 
-1. **Create a new repository** on GitHub (e.g., `your-username/trading-use-cases`)
+1. **Create a new repository** on GitHub (e.g., `your-username/openclaw-trading`)
 
 2. **Copy the files** to your repository:
    ```bash
-   git clone https://github.com/your-username/trading-use-cases.git
-   cd trading-use-cases
-   cp /path/to/workspace/trading-use-cases/* .
+   git clone https://github.com/your-username/openclaw-trading.git
+   cd openclaw-trading
+   cp /path/to/workspace/openclaw-trading/* .
    git add .
    git commit -m "Initial commit: Trading use cases catalogue"
    git push origin main
@@ -72,7 +72,7 @@ This site is designed to be deployed as a GitHub Pages static site. Here's how:
 Run the included deployment script:
 
 ```bash
-cd /home/danielquek/.openclaw/workspace/trading-use-cases
+cd /home/danielquek/.openclaw/workspace/openclaw-trading
 ./deploy.sh your-github-username
 ```
 
@@ -81,7 +81,7 @@ cd /home/danielquek/.openclaw/workspace/trading-use-cases
 ## 📁 File Structure
 
 ```
-trading-use-cases/
+openclaw-trading/
 ├── index.html          # Main single-page application
 ├── README.md           # This file
 ├── deploy.sh           # Deployment helper script

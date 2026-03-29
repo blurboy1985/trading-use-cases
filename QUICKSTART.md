@@ -9,7 +9,7 @@ A comprehensive, searchable static website cataloguing **40 trading and finance 
 ## 📁 Files Created
 
 ```
-/home/danielquek/.openclaw/workspace/trading-use-cases/
+/home/danielquek/.openclaw/workspace/openclaw-trading/
 ├── index.html              # Main website (78KB, single-page app)
 ├── README.md               # Documentation and disclaimers
 ├── CONTRIBUTING.md         # Contribution guidelines
@@ -26,7 +26,7 @@ A comprehensive, searchable static website cataloguing **40 trading and finance 
 ### Option 1: One-Command Deploy
 
 ```bash
-cd /home/danielquek/.openclaw/workspace/trading-use-cases
+cd /home/danielquek/.openclaw/workspace/openclaw-trading
 ./deploy.sh blurboy1985
 ```
 
@@ -37,19 +37,19 @@ This will:
 
 ### Option 2: Manual Deploy
 
-1. Create a new repository on GitHub: `blurboy1985/trading-use-cases`
+1. Create a new repository on GitHub: `blurboy1985/openclaw-trading`
 2. Clone and copy files:
    ```bash
-   git clone https://github.com/blurboy1985/trading-use-cases.git
-   cd trading-use-cases
-   cp /home/danielquek/.openclaw/workspace/trading-use-cases/* .
+   git clone https://github.com/blurboy1985/openclaw-trading.git
+   cd openclaw-trading
+   cp /home/danielquek/.openclaw/workspace/openclaw-trading/* .
    git add .
    git commit -m "Initial commit"
    git push origin main
    ```
 3. Go to GitHub → Settings → Pages → Enable from `main` branch
 
-**Your site will be at:** `https://blurboy1985.github.io/trading-use-cases/`
+**Your site will be at:** `https://blurboy1985.github.io/openclaw-trading/`
 
 ---
 

@@ -101,8 +101,8 @@ Thank you for your interest in contributing! This catalogue is a community resou
 
 1. Clone your fork:
 ```bash
-git clone https://github.com/your-username/trading-use-cases.git
-cd trading-use-cases
+git clone https://github.com/your-username/openclaw-trading.git
+cd openclaw-trading
 ```
 
 2. Open `index.html` in your browser:

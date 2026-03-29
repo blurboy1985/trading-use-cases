@@ -146,7 +146,7 @@
         <h1>🖥️ My Setup: Singapore Trading Agent</h1>
         <p class="subtitle">Running OpenClaw on budget hardware with SGX/US market focus</p>
         <div class="specs">
-            🖥️ N150 Mini PC (6 cores) • 🌏 Singapore (SGT) • 📱 Telegram • 📓 Notion • 🤖 Claude
+            🖥️ N150 Mini PC (4 cores, 8GB DDR5) • 🌏 Singapore (SGT) • 📱 Telegram • 📓 Notion • 🤖 Claude
         </div>
     </header>
 
@@ -168,17 +168,17 @@
                 <div class="spec-card">
                     <h4>Machine</h4>
                     <p class="value">N150 Mini PC</p>
-                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Intel Alder Lake-N, 6 cores, 6 threads</p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Intel Alder Lake-N, 4 cores, up to 3.6GHz</p>
                 </div>
                 <div class="spec-card">
                     <h4>RAM</h4>
-                    <p class="value">16GB DDR4</p>
-                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Enough for OpenClaw + Python scripts</p>
+                    <p class="value">8GB DDR5</p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">7.5GB usable - sufficient for OpenClaw + scripts</p>
                 </div>
                 <div class="spec-card">
                     <h4>Storage</h4>
-                    <p class="value">512GB NVMe SSD</p>
-                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Fast storage for workspace and logs</p>
+                    <p class="value">128GB Hanstor M.2 SSD</p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">119GB usable - monitor space if logging heavily</p>
                 </div>
                 <div class="spec-card">
                     <h4>Internet</h4>
@@ -187,8 +187,8 @@
                 </div>
                 <div class="spec-card">
                     <h4>OS</h4>
-                    <p class="value">Ubuntu Desktop</p>
-                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Linux 6.17.0, easy cron management</p>
+                    <p class="value">Ubuntu 24.04.4 LTS</p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Latest LTS, easy cron management</p>
                 </div>
                 <div class="spec-card">
                     <h4>Power</h4>
@@ -204,7 +204,18 @@
                     <li><strong>Low power:</strong> Can run 24/7 without worrying about electricity costs</li>
                     <li><strong>Quiet:</strong> No fan noise, fits anywhere in the home</li>
                     <li><strong>Enough power:</strong> Handles OpenClaw + Python scripts + browser automation easily</li>
+                    <li><strong>DDR5 RAM:</strong> Faster memory helps with multitasking</li>
                     <li><strong>Not for HFT:</strong> Don't expect microsecond latency—and that's fine for swing trading</li>
+                </ul>
+            </div>
+
+            <div class="warning-box" style="margin-top: 1rem;">
+                <strong>⚠️ Storage Management (128GB)</strong>
+                <p>With 119GB usable, monitor disk space:</p>
+                <ul style="margin-bottom: 0;">
+                    <li>Rotate logs weekly: <code>find ~/logs -name "*.log" -mtime +7 -delete</code></li>
+                    <li>Avoid storing large datasets locally—use APIs or cloud storage</li>
+                    <li>Consider external SSD or cloud sync for historical data</li>
                 </ul>
             </div>
         </section>
@@ -284,9 +295,10 @@
             <ul>
                 <li>✗ Real-time tick-by-tick analysis (too much CPU/network)</li>
                 <li>✗ High-frequency trading (latency too high anyway)</li>
-                <li>✗ Multiple concurrent browser sessions</li>
+                <li>✗ Multiple concurrent browser sessions (8GB RAM limit)</li>
                 <li>✗ Running 24/7 Python loops (use cron instead)</li>
                 <li>✗ Local LLM inference (use API-based models)</li>
+                <li>✗ Storing large datasets locally (128GB SSD fills fast)</li>
             </ul>
         </section>
 
