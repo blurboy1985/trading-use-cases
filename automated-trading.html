@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Trading | OpenClaw Trading</title>
+    <style>
+        :root { --primary: #ff6b35; --secondary: #1a1a2e; --accent: #00d9ff; --bg: #0f0f1a; --bg-card: #16162a; --text: #e8e8f0; --text-muted: #a0a0b0; --border: #2a2a4a; --success: #00ff88; --warning: #ffaa00; --danger: #ff4466; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        .risk-banner { background: linear-gradient(135deg, #2a1a1a, #1a1a2e); border-bottom: 2px solid var(--danger); padding: 1rem; text-align: center; }
+        .risk-banner strong { color: var(--danger); text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
+        header { background: var(--secondary); padding: 2rem 1rem; text-align: center; border-bottom: 1px solid var(--border); }
+        header h1 { font-size: 2rem; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        nav { background: var(--bg-card); padding: 1rem; position: sticky; top: 0; }
+        nav ul { display: flex; justify-content: center; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+        nav a { color: var(--text); text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; }
+        nav a:hover, nav a.active { background: var(--primary); color: white; }
+        main { max-width: 1000px; margin: 0 auto; padding: 2rem 1rem; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+        .critical { background: rgba(255, 68, 102, 0.15); border: 2px solid var(--danger); padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0; }
+        .critical h3 { color: var(--danger); margin-bottom: 0.75rem; }
+        .tag { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem; margin-right: 0.5rem; }
+        .tag.high { background: rgba(255, 68, 102, 0.15); color: var(--danger); border: 1px solid var(--danger); }
+        .tag.paper { background: rgba(0, 255, 136, 0.15); color: var(--success); border: 1px solid var(--success); }
+        footer { background: var(--secondary); padding: 2rem 1rem; text-align: center; border-top: 1px solid var(--border); margin-top: 3rem; }
+        footer a { color: var(--primary); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="risk-banner"><strong>⚠️ CRITICAL WARNING</strong>Automated trading carries significant financial risk. ALWAYS paper trade first. Never deploy real capital without 3+ months of paper trading.</div>
+    <header><h1>🤖 Automated Trading</h1><p>Paper trading, broker APIs, and execution automation</p></header>
+    <nav><ul><li><a href="index.html">Home</a></li><li><a href="automated-trading.html" class="active">Automated</a></li><li><a href="risk.html">Risk</a></li></ul></nav>
+    <main>
+        <div class="critical">
+            <h3>🛑 Read This First</h3>
+            <ul>
+                <li><strong>Paper trade for at least 3 months</strong> before live deployment</li>
+                <li><strong>Start with read-only API keys</strong>, graduate to trading permissions only after testing</li>
+                <li><strong>Implement kill switches</strong> - Telegram command to halt all trading</li>
+                <li><strong>Set position limits</strong> - max 2-5% per position, max daily loss limits</li>
+                <li><strong>Never give withdrawal permissions</strong> to API keys</li>
+            </ul>
+        </div>
+        <section>
+            <h2>Use Cases</h2>
+            <div class="card"><h3>Paper Trading Bot (Alpaca)</h3><p>Validate strategies with simulated trades. Zero financial risk. Excellent for testing.</p><span class="tag paper">✓ Zero Financial Risk</span></div>
+            <div class="card"><h3>DCA Automation</h3><p>Scheduled purchases (weekly/monthly). Removes emotion from timing.</p><span class="tag high">⚠️ High Risk (Live)</span></div>
+            <div class="card"><h3>Grid Trading</h3><p>Automated buy-low, sell-high in range-bound markets.</p><span class="tag high">⚠️ High Risk</span></div>
+            <div class="card"><h3>Stop-Loss & Take-Profit Manager</h3><p>Advanced exit management beyond broker native tools.</p><span class="tag high">⚠️ Medium-High Risk</span></div>
+            <div class="card"><h3>Crypto Exchange Automation</h3><p>Binance, Coinbase API integration for spot/futures trading.</p><span class="tag high">⚠️ High Risk</span></div>
+        </section>
+        <section>
+            <h2>Broker Comparison</h2>
+            <div class="card"><h3>Alpaca (Recommended for US)</h3><p>Zero commission, excellent paper trading, simple API. Stocks + crypto. No options.</p></div>
+            <div class="card"><h3>Interactive Brokers (Global)</h3><p>Full API, global markets, all asset classes. Steep learning curve. Best for serious traders.</p></div>
+            <div class="card"><h3>Binance (Crypto)</h3><p>Largest crypto exchange. Spot, futures, options. NOT available to US users. Secure your API keys!</p></div>
+        </section>
+        <div style="text-align: center; margin-top: 2rem;"><a href="index.html" style="color: var(--primary);">← Back to Home</a> | <a href="risk.html" style="color: var(--primary);">Risk Framework →</a></div>
+    </main>
+    <footer><p>Built with 🦞 | <a href="risk.html">Read Risk Framework Before Deploying</a></p></footer>
+</body>
+</html>

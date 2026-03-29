@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Setup - Singapore Trading Agent | OpenClaw Trading</title>
+    <meta name="description" content="How I run OpenClaw trading agents on an N150 mini PC in Singapore. SGX/US market focus, cron schedules, and Notion integration.">
+    
+    <style>
+        :root {
+            --primary: #ff6b35; --primary-dark: #e55a2b; --secondary: #1a1a2e;
+            --accent: #00d9ff; --bg: #0f0f1a; --bg-card: #16162a;
+            --bg-card-hover: #1f1f3a; --text: #e8e8f0; --text-muted: #a0a0b0;
+            --border: #2a2a4a; --success: #00ff88; --warning: #ffaa00; --danger: #ff4466;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg); color: var(--text); line-height: 1.6;
+        }
+        .risk-banner {
+            background: linear-gradient(135deg, #2a1a1a 0%, #1a1a2e 100%);
+            border-bottom: 2px solid var(--danger); padding: 1rem; text-align: center;
+        }
+        .risk-banner strong { color: var(--danger); text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
+        .risk-banner p { color: var(--text-muted); font-size: 0.9rem; max-width: 900px; margin: 0 auto; }
+        header {
+            background: var(--secondary); padding: 2rem 1rem; text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        header h1 {
+            font-size: 2rem; margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        header .subtitle { color: var(--text-muted); max-width: 700px; margin: 0 auto; }
+        header .specs { 
+            display: inline-block; 
+            background: var(--bg-card); 
+            padding: 0.5rem 1rem; 
+            border-radius: 20px; 
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            border: 1px solid var(--border);
+        }
+        nav {
+            background: var(--bg-card); padding: 1rem; position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+        nav ul { display: flex; justify-content: center; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+        nav a { color: var(--text); text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; transition: all 0.2s; }
+        nav a:hover, nav a.active { background: var(--primary); color: white; }
+        main { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem; }
+        section { margin-bottom: 3rem; }
+        h2 {
+            font-size: 1.6rem; margin-bottom: 1.25rem; padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 0.75rem;
+        }
+        h3 { font-size: 1.2rem; margin: 1.5rem 0 0.75rem; color: var(--text); }
+        p { color: var(--text-muted); margin-bottom: 1rem; }
+        ul, ol { color: var(--text-muted); margin-bottom: 1rem; padding-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        .spec-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1.5rem 0;
+        }
+        .spec-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem;
+        }
+        .spec-card h4 { color: var(--primary); margin-bottom: 0.75rem; font-size: 1rem; }
+        .spec-card p { font-size: 0.95rem; margin-bottom: 0; }
+        .spec-card .value { color: var(--text); font-weight: 600; }
+        .recommendation-box {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, var(--bg-card) 100%);
+            border: 1px solid var(--accent); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0;
+        }
+        .recommendation-box h4 { color: var(--accent); margin-bottom: 0.75rem; }
+        .warning-box {
+            background: rgba(255, 170, 0, 0.1); border: 1px solid var(--warning);
+            border-radius: 8px; padding: 1rem; margin: 1.5rem 0;
+        }
+        .warning-box strong { color: var(--warning); display: block; margin-bottom: 0.5rem; }
+        .success-box {
+            background: rgba(0, 255, 136, 0.1); border: 1px solid var(--success);
+            border-radius: 8px; padding: 1rem; margin: 1.5rem 0;
+        }
+        .success-box strong { color: var(--success); display: block; margin-bottom: 0.5rem; }
+        code {
+            background: #0d0d1a; padding: 0.2rem 0.5rem; border-radius: 4px;
+            font-family: 'Monaco', 'Consolas', monospace; font-size: 0.9em; color: var(--accent);
+        }
+        pre {
+            background: #0d0d1a; padding: 1rem; border-radius: 8px; overflow-x: auto;
+            margin: 1rem 0; border: 1px solid var(--border);
+        }
+        pre code { background: none; padding: 0; }
+        .tag {
+            display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px;
+            font-size: 0.8rem; margin-right: 0.5rem; margin-bottom: 0.5rem;
+            background: var(--secondary); color: var(--accent); border: 1px solid var(--border);
+        }
+        .tag.sg { background: rgba(255, 107, 53, 0.15); color: var(--primary); border-color: var(--primary); }
+        table {
+            width: 100%; border-collapse: collapse; margin: 1.5rem 0;
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+        }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: var(--secondary); color: var(--text); font-weight: 600; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background: var(--bg-card-hover); }
+        .timezone-box {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0;
+        }
+        .timezone-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;
+        }
+        .timezone-item {
+            background: var(--secondary); padding: 1rem; border-radius: 8px; text-align: center;
+        }
+        .timezone-item .label { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.5rem; }
+        .timezone-item .time { color: var(--text); font-size: 1.1rem; font-weight: 600; }
+        .soul-snippet {
+            background: #0d0d1a; border: 1px solid var(--border); border-radius: 8px; 
+            padding: 1rem; margin: 1rem 0; font-family: 'Monaco', 'Consolas', monospace; 
+            font-size: 0.85rem; color: var(--text-muted); white-space: pre-wrap;
+        }
+        footer {
+            background: var(--secondary); padding: 2rem 1rem; text-align: center;
+            border-top: 1px solid var(--border); margin-top: 3rem;
+        }
+        footer a { color: var(--primary); text-decoration: none; }
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.5rem; }
+            nav ul { gap: 0.75rem; }
+            table { font-size: 0.85rem; }
+            th, td { padding: 0.75rem 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="risk-banner">
+        <strong>⚠️ NOT Financial Advice</strong>
+        <p>Personal setup documentation for educational purposes. Your mileage may vary. Always paper trade first.</p>
+    </div>
+
+    <header>
+        <h1>🖥️ My Setup: Singapore Trading Agent</h1>
+        <p class="subtitle">Running OpenClaw on budget hardware with SGX/US market focus</p>
+        <div class="specs">
+            🖥️ N150 Mini PC (6 cores) • 🌏 Singapore (SGT) • 📱 Telegram • 📓 Notion • 🤖 Claude
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="starter.html">Starter</a></li>
+            <li><a href="risk.html">Risk</a></li>
+            <li><a href="my-setup.html" class="active">My Setup</a></li>
+            <li><a href="economics.html">Economics</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Hardware Specs -->
+        <section>
+            <h2>🖥️ Hardware & Infrastructure</h2>
+            <div class="spec-grid">
+                <div class="spec-card">
+                    <h4>Machine</h4>
+                    <p class="value">N150 Mini PC</p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Intel Alder Lake-N, 6 cores, 6 threads</p>
+                </div>
+                <div class="spec-card">
+                    <h4>RAM</h4>
+                    <p class="value">16GB DDR4</p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Enough for OpenClaw + Python scripts</p>
+                </div>
+                <div class="spec-card">
+                    <h4>Storage</h4>
+                    <p class="value">512GB NVMe SSD</p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Fast storage for workspace and logs</p>
+                </div>
+                <div class="spec-card">
+                    <h4>Internet</h4>
+                    <p class="value">Singtel Gigabit</p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">~939 Mbps symmetrical</p>
+                </div>
+                <div class="spec-card">
+                    <h4>OS</h4>
+                    <p class="value">Ubuntu Desktop</p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Linux 6.17.0, easy cron management</p>
+                </div>
+                <div class="spec-card">
+                    <h4>Power</h4>
+                    <p class="value">~15W idle</p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Runs 24/7, ~$5/month electricity</p>
+                </div>
+            </div>
+
+            <div class="recommendation-box">
+                <h4>💡 Why This Hardware Works</h4>
+                <p>The N150 is perfect for trading automation because:</p>
+                <ul style="margin-bottom: 0;">
+                    <li><strong>Low power:</strong> Can run 24/7 without worrying about electricity costs</li>
+                    <li><strong>Quiet:</strong> No fan noise, fits anywhere in the home</li>
+                    <li><strong>Enough power:</strong> Handles OpenClaw + Python scripts + browser automation easily</li>
+                    <li><strong>Not for HFT:</strong> Don't expect microsecond latency—and that's fine for swing trading</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Agent Config -->
+        <section>
+            <h2>🤖 Agent Configuration</h2>
+            <div class="spec-grid">
+                <div class="spec-card">
+                    <h4>Agent Name</h4>
+                    <p class="value">DaNiu 大牛🐮</p>
+                </div>
+                <div class="spec-card">
+                    <h4>Model</h4>
+                    <p class="value">Anthropic Claude</p>
+                </div>
+                <div class="spec-card">
+                    <h4>Primary Channel</h4>
+                    <p class="value">Telegram</p>
+                </div>
+                <div class="spec-card">
+                    <h4>Integration</h4>
+                    <p class="value">Notion API</p>
+                </div>
+            </div>
+
+            <h3>SOUL.md Snippet (Trading-Specific)</h3>
+            <div class="soul-snippet"># Trading Agent Rules
+
+## Risk Controls
+- NEVER execute trades without explicit human approval (until Level 5)
+- ALWAYS verify prices against at least 2 sources before reporting
+- FLAG any data that is delayed or estimated
+- RESPECT position limits: max 5% per position, max 20% total portfolio
+
+## Market Hours (Singapore Time)
+- SGX: 9:00 AM - 5:00 PM SGT (Monday-Friday)
+- US: 9:30 PM - 4:00 AM SGT (Sunday-Thursday evening)
+- Crypto: 24/7
+
+## Data Verification
+- Yahoo Finance: 15-min delay for SGX, use for swing only
+- SEC EDGAR: Real-time filings, trusted source
+- Cross-check critical data before reporting
+
+## Communication Style
+- Be concise, use bullet points
+- Include timestamps on all data
+- Cite sources for all numbers
+- Flag uncertainty clearly</div>
+        </section>
+
+        <!-- Recommended Automations -->
+        <section>
+            <h2>✅ Recommended Trading Automations (For This Setup)</h2>
+            
+            <div class="recommendation-box">
+                <h4>🎯 Start With These 3 (Low Power, High Value)</h4>
+                <p>These run efficiently on the N150 and provide maximum value:</p>
+                <ol>
+                    <li><strong>SGX/US Morning Briefing</strong> (7am SGT daily, 2-3 min runtime)</li>
+                    <li><strong>Watchlist Price Alerts</strong> (every 15 min during market hours, 30 sec runtime)</li>
+                    <li><strong>Weekly Portfolio Report to Notion</strong> (Friday 6pm SGT, 1-2 min runtime)</li>
+                </ol>
+            </div>
+
+            <h3>What Works Well on Low-Power Hardware</h3>
+            <ul>
+                <li>✓ Scheduled tasks (cron jobs) that run briefly</li>
+                <li>✓ Monitoring and alerting (no continuous polling)</li>
+                <li>✓ Daily/weekly reports and summaries</li>
+                <li>✓ Browser automation for occasional data fetching</li>
+                <li>✓ API calls with reasonable rate limits</li>
+            </ul>
+
+            <h3>What to Avoid on This Hardware</h3>
+            <ul>
+                <li>✗ Real-time tick-by-tick analysis (too much CPU/network)</li>
+                <li>✗ High-frequency trading (latency too high anyway)</li>
+                <li>✗ Multiple concurrent browser sessions</li>
+                <li>✗ Running 24/7 Python loops (use cron instead)</li>
+                <li>✗ Local LLM inference (use API-based models)</li>
+            </ul>
+        </section>
+
+        <!-- Cron Schedules -->
+        <section>
+            <h2>⏰ Optimal Cron Schedules (SGT Timezone)</h2>
+            
+            <div class="timezone-box">
+                <h4>Market Hours Reference</h4>
+                <div class="timezone-grid">
+                    <div class="timezone-item">
+                        <div class="label">SGX Market</div>
+                        <div class="time">9:00 AM - 5:00 PM</div>
+                        <div class="label" style="margin-top: 0.5rem;">SGT (Mon-Fri)</div>
+                    </div>
+                    <div class="timezone-item">
+                        <div class="label">US Market</div>
+                        <div class="time">9:30 PM - 4:00 AM</div>
+                        <div class="label" style="margin-top: 0.5rem;">SGT (Sun-Thu evening)</div>
+                    </div>
+                    <div class="timezone-item">
+                        <div class="label">Crypto</div>
+                        <div class="time">24/7</div>
+                        <div class="label" style="margin-top: 0.5rem;">Global markets</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>My Crontab Configuration</h3>
+            <pre><code># Edit with: crontab -e
+
+# === Morning Briefing (Weekdays 7:00 AM SGT) ===
+0 7 * * 1-5 cd ~/.openclaw/workspace/skills/market-briefing && python3 market_briefing.py | openclaw send --to telegram --message "stdin"
+
+# === SGX Price Alerts (Every 15 min during SGX hours) ===
+*/15 9-16 * * 1-5 cd ~/.openclaw/workspace/skills/price-alerts && python3 price_alerts.py 2>&1 | grep -v "No alerts" | openclaw send --to telegram --message "stdin"
+
+# === US Market Alerts (Every 15 min during US hours, SGT) ===
+*/15 21-23 * * 0-4 cd ~/.openclaw/workspace/skills/price-alerts && python3 price_alerts.py 2>&1 | grep -v "No alerts" | openclaw send --to telegram --message "stdin"
+*/15 0-3 * * 1-5 cd ~/.openclaw/workspace/skills/price-alerts && python3 price_alerts.py 2>&1 | grep -v "No alerts" | openclaw send --to telegram --message "stdin"
+
+# === Portfolio Sync to Notion (Friday 6:00 PM SGT) ===
+0 18 * * 5 cd ~/.openclaw/workspace/skills/portfolio-sync && python3 sync_notion.py >> ~/logs/portfolio-sync.log 2>&1
+
+# === Earnings Check (Daily 8:00 AM SGT) ===
+0 8 * * * cd ~/.openclaw/workspace/skills/earnings && python3 check_earnings.py 2>&1 | openclaw send --to telegram --message "stdin"
+
+# === Log Rotation (Sunday 1:00 AM SGT) ===
+0 1 * * 0 find ~/logs -name "*.log" -mtime +30 -delete</code></pre>
+
+            <div class="success-box">
+                <strong>✅ Pro Tips</strong>
+                <ul style="margin-bottom: 0;">
+                    <li>Redirect output to logs for debugging: <code>>> ~/logs/briefing.log 2>&1</code></li>
+                    <li>Use <code>grep -v "No alerts"</code> to avoid spam when no alerts</li>
+                    <li>Test cron jobs manually first before scheduling</li>
+                    <li>Check cron logs: <code>grep CRON /var/log/syslog</code></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Notion Integration -->
+        <section>
+            <h2>📓 Notion Integration</h2>
+            <p>I use Notion for portfolio tracking, watchlist management, and trade journal.</p>
+
+            <h3>Database Structure</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Database</th>
+                        <th>Purpose</th>
+                        <th>Update Frequency</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Holdings</strong></td>
+                        <td>Current positions, quantity, avg cost, current value</td>
+                        <td>Daily (6pm SGT)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Watchlist</strong></td>
+                        <td>Stocks to monitor, target entry/exit, thesis</td>
+                        <td>As needed</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Trade Journal</strong></td>
+                        <td>Executed trades, entry/exit, P&L, lessons learned</td>
+                        <td>Per trade</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dividend Tracker</strong></td>
+                        <td>Dividend stocks, ex-dates, payment dates, yield</td>
+                        <td>Weekly</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Notion API Setup</h3>
+            <pre><code># 1. Create integration at: https://www.notion.so/my-integrations
+# 2. Copy "Internal Integration Token"
+# 3. Share your databases with the integration
+# 4. Store token in environment variable:
+
+export NOTION_API_KEY="secret_xxxxx"
+
+# 5. In your Python scripts:
+import os
+from notion_client import Client
+
+notion = Client(auth=os.environ.get('NOTION_API_KEY'))</code></pre>
+
+            <div class="warning-box">
+                <strong>⚠️ Security Note</strong>
+                Never commit your Notion API key to git. Use environment variables or a .env file (added to .gitignore).
+            </div>
+        </section>
+
+        <!-- Singapore-Specific -->
+        <section>
+            <h2>🇸🇬 Singapore-Specific Considerations</h2>
+
+            <h3>SGX Trading</h3>
+            <ul>
+                <li><strong>Trading hours:</strong> 9:00 AM - 5:00 PM SGT (pre-market 8:30-9:00, after-hours 5:00-5:15)</li>
+                <li><strong>Data delay:</strong> Yahoo Finance has 15-min delay. Not suitable for intraday.</li>
+                <li><strong>Popular brokers:</strong> POEMS, DBS Vickers, IBKR SG, Moomoo SG</li>
+                <li><strong>Best for automation:</strong> Interactive Brokers Singapore (full API access)</li>
+            </ul>
+
+            <h3>US Trading from Singapore</h3>
+            <ul>
+                <li><strong>Trading hours:</strong> 9:30 PM - 4:00 AM SGT (Sunday evening to Friday early morning)</li>
+                <li><strong>Settlement:</strong> T+1 (one business day)</li>
+                <li><strong>Currency:</strong> SGD-USD conversion fees apply (use Wise or multi-currency account)</li>
+                <li><strong>Tax:</strong> No capital gains tax in Singapore for personal trading</li>
+            </ul>
+
+            <h3>MAS Regulations (Personal Trading)</h3>
+            <ul>
+                <li>Personal trading is generally unregulated (you're trading your own money)</li>
+                <li>Crypto trading is legal but unregulated (MAS has issued investor warnings)</li>
+                <li>If managing others' money, you need a Capital Markets Services License</li>
+                <li>No Pattern Day Trader rule (unlike US)</li>
+            </ul>
+
+            <div class="recommendation-box">
+                <h4>💡 Recommended Setup for Singapore Traders</h4>
+                <ol>
+                    <li><strong>Broker:</strong> Interactive Brokers Singapore (SGX + US + global markets, full API)</li>
+                    <li><strong>Data:</strong> Yahoo Finance (free, 15-min delay) for swing trading</li>
+                    <li><strong>Focus:</strong> SGX dividend stocks + US tech growth</li>
+                    <li><strong>Timezone advantage:</strong> Monitor US market overnight while you sleep, review alerts in morning</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Monthly Costs -->
+        <section>
+            <h2>💰 My Monthly Costs</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Cost (SGD)</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Hardware (N150 mini PC)</td>
+                        <td>$250 (one-time)</td>
+                        <td>Amortized over 3 years = ~$7/mo</td>
+                    </tr>
+                    <tr>
+                        <td>Electricity</td>
+                        <td>~$5/mo</td>
+                        <td>15W idle, 24/7 operation</td>
+                    </tr>
+                    <tr>
+                        <td>Anthropic API (Claude)</td>
+                        <td>$20-40/mo</td>
+                        <td>Varies with usage</td>
+                    </tr>
+                    <tr>
+                        <td>Market Data</td>
+                        <td>$0</td>
+                        <td>Yahoo Finance (free)</td>
+                    </tr>
+                    <tr>
+                        <td>Notion</td>
+                        <td>$0</td>
+                        <td>Free tier sufficient</td>
+                    </tr>
+                    <tr>
+                        <td>Telegram</td>
+                        <td>$0</td>
+                        <td>Free</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total (monthly)</strong></td>
+                        <td><strong>~$32-52/mo</strong></td>
+                        <td>Plus one-time hardware</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="margin-top: 1rem; font-size: 0.9rem;">
+                <strong>Comparison:</strong> This is cheaper than TradingView Pro ($60/mo) and vastly cheaper than Bloomberg Terminal ($2,000/mo), 
+                while providing similar monitoring and alerting capabilities for my use case.
+            </p>
+        </section>
+
+        <!-- What's Next -->
+        <section>
+            <h2>🚀 What's Next for My Setup</h2>
+            <p>Planned upgrades and improvements:</p>
+            <ul>
+                <li>□ Add Polygon.io for real-time US data ($29/mo)</li>
+                <li>□ Implement paper trading bot with Alpaca</li>
+                <li>□ Add earnings transcript summarization</li>
+                <li>□ Build multi-agent setup (researcher + executor)</li>
+                <li>□ Integrate with SGX API for real-time data (if available)</li>
+            </ul>
+        </section>
+
+        <div class="last-updated" style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin: 2rem 0; padding-top: 2rem; border-top: 1px solid var(--border);">
+            Last updated: <strong>2026-03-29</strong> | 
+            <a href="index.html" style="color: var(--primary);">← Back to Home</a> |
+            <a href="starter.html" style="color: var(--primary);">Starter Guide →</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>Built with 🦞 by DaNiu 大牛🐮 | <a href="https://docs.openclaw.ai">OpenClaw Docs</a> | <a href="https://discord.gg/clawd">Discord</a></p>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+            ⚠️ Not financial advice. Personal setup documentation for educational purposes.
+        </p>
+    </footer>
+</body>
+</html>

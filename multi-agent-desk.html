@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Agent Trading Desk | OpenClaw Trading</title>
+    <style>
+        :root { --primary: #ff6b35; --secondary: #1a1a2e; --accent: #00d9ff; --bg: #0f0f1a; --bg-card: #16162a; --text: #e8e8f0; --text-muted: #a0a0b0; --border: #2a2a4a; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        header { background: var(--secondary); padding: 2rem 1rem; text-align: center; border-bottom: 1px solid var(--border); }
+        header h1 { font-size: 2rem; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        nav { background: var(--bg-card); padding: 1rem; position: sticky; top: 0; }
+        nav ul { display: flex; justify-content: center; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+        nav a { color: var(--text); text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; }
+        nav a:hover, nav a.active { background: var(--primary); color: white; }
+        main { max-width: 1000px; margin: 0 auto; padding: 2rem 1rem; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+        .diagram { background: var(--secondary); padding: 2rem; border-radius: 12px; margin: 1.5rem 0; text-align: center; font-family: monospace; white-space: pre; overflow-x: auto; }
+        footer { background: var(--secondary); padding: 2rem 1rem; text-align: center; border-top: 1px solid var(--border); margin-top: 3rem; }
+        footer a { color: var(--primary); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <header><h1>🏢 Multi-Agent Trading Desk</h1><p>Orchestrated agent teams for sophisticated trading</p></header>
+    <nav><ul><li><a href="index.html">Home</a></li><li><a href="multi-agent-desk.html" class="active">Multi-Agent</a></li></ul></nav>
+    <main>
+        <section>
+            <h2>Architecture Patterns</h2>
+            <div class="card">
+                <h3>Simple (2 Agents)</h3>
+                <div class="diagram">┌─────────────┐     ┌─────────────┐
+│  Researcher │ ──→ │  Executor   │
+│  (Analysis) │     │  (Trading)  │
+└─────────────┘     └─────────────┘</div>
+                <p>Researcher analyzes markets, Executor handles trades. Good for single-strategy setups.</p>
+            </div>
+            <div class="card">
+                <h3>Standard (4 Agents)</h3>
+                <div class="diagram">┌─────────────┐     ┌─────────────┐
+│  Researcher │ ──→ │   Analyst   │
+└─────────────┘     └──────┬──────┘
+                           ↓
+                    ┌─────────────┐     ┌─────────────┐
+                    │Risk Manager│ ──→ │  Executor   │
+                    └─────────────┘     └─────────────┘</div>
+                <p>Researcher → Analyst → Risk Manager → Executor. Risk manager can veto trades.</p>
+            </div>
+            <div class="card">
+                <h3>Advanced (6+ Agents)</h3>
+                <p>Per-asset-class agents (Stocks, Crypto, Options) + Orchestrator + Risk Veto + Executor. For sophisticated multi-strategy operations.</p>
+            </div>
+        </section>
+        <section>
+            <h2>Model Selection Per Role</h2>
+            <div class="card"><strong>Orchestrator/Risk:</strong> Opus/Claude-3.5 (highest reasoning)</div>
+            <div class="card"><strong>Analysis:</strong> Sonnet/Claude-3 (balanced performance/cost)</div>
+            <div class="card"><strong>Monitoring:</strong> Haiku/Claude-3-fast (fast, cheap for simple tasks)</div>
+        </section>
+        <div style="text-align: center; margin-top: 2rem;"><a href="index.html" style="color: var(--primary);">← Back to Home</a></div>
+    </main>
+    <footer><p>Built with 🦞</p></footer>
+</body>
+</html>

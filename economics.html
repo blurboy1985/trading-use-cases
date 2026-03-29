@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Economics - Cost Analysis | OpenClaw Trading</title>
+    <meta name="description" content="Cost comparison: OpenClaw trading agent vs TradingView, Bloomberg, and paid signal services. Break-even calculator and monthly cost breakdown.">
+    
+    <style>
+        :root {
+            --primary: #ff6b35; --primary-dark: #e55a2b; --secondary: #1a1a2e;
+            --accent: #00d9ff; --bg: #0f0f1a; --bg-card: #16162a;
+            --bg-card-hover: #1f1f3a; --text: #e8e8f0; --text-muted: #a0a0b0;
+            --border: #2a2a4a; --success: #00ff88; --warning: #ffaa00; --danger: #ff4466;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg); color: var(--text); line-height: 1.6;
+        }
+        .risk-banner {
+            background: linear-gradient(135deg, #2a1a1a 0%, #1a1a2e 100%);
+            border-bottom: 2px solid var(--danger); padding: 1rem; text-align: center;
+        }
+        .risk-banner strong { color: var(--danger); text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
+        .risk-banner p { color: var(--text-muted); font-size: 0.9rem; max-width: 900px; margin: 0 auto; }
+        header {
+            background: var(--secondary); padding: 2rem 1rem; text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        header h1 {
+            font-size: 2rem; margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        header p { color: var(--text-muted); max-width: 700px; margin: 0 auto; }
+        nav {
+            background: var(--bg-card); padding: 1rem; position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+        nav ul { display: flex; justify-content: center; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+        nav a { color: var(--text); text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; transition: all 0.2s; }
+        nav a:hover, nav a.active { background: var(--primary); color: white; }
+        main { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem; }
+        section { margin-bottom: 3rem; }
+        h2 {
+            font-size: 1.6rem; margin-bottom: 1.25rem; padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 0.75rem;
+        }
+        h3 { font-size: 1.2rem; margin: 1.5rem 0 0.75rem; color: var(--text); }
+        p { color: var(--text-muted); margin-bottom: 1rem; }
+        ul, ol { color: var(--text-muted); margin-bottom: 1rem; padding-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        .comparison-table {
+            width: 100%; border-collapse: collapse; margin: 1.5rem 0;
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+        }
+        .comparison-table th, .comparison-table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border); }
+        .comparison-table th { background: var(--secondary); color: var(--text); font-weight: 600; }
+        .comparison-table tr:last-child td { border-bottom: none; }
+        .comparison-table tr:hover { background: var(--bg-card-hover); }
+        .comparison-table .highlight { background: rgba(0, 255, 136, 0.1); }
+        .cost-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin: 1rem 0;
+        }
+        .cost-card h4 { color: var(--primary); margin-bottom: 0.75rem; }
+        .cost-card .amount { font-size: 2rem; font-weight: bold; color: var(--text); }
+        .cost-card .period { color: var(--text-muted); font-size: 0.9rem; }
+        .cost-card .breakdown { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+        .cost-card .breakdown-item { display: flex; justify-content: space-between; padding: 0.5rem 0; color: var(--text-muted); }
+        .tier-box {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, var(--bg-card) 100%);
+            border: 1px solid var(--accent); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0;
+        }
+        .tier-box h4 { color: var(--accent); margin-bottom: 0.75rem; }
+        .calculator {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin: 1.5rem 0;
+        }
+        .calculator h4 { color: var(--primary); margin-bottom: 1rem; }
+        .calculator label { display: block; color: var(--text-muted); margin-bottom: 0.5rem; }
+        .calculator input {
+            width: 100%; padding: 0.75rem; background: var(--secondary); border: 1px solid var(--border);
+            border-radius: 6px; color: var(--text); font-size: 1rem; margin-bottom: 1rem;
+        }
+        .calculator .result {
+            margin-top: 1.5rem; padding: 1rem; background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--success); border-radius: 8px;
+        }
+        .tag {
+            display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px;
+            font-size: 0.8rem; margin-right: 0.5rem; margin-bottom: 0.5rem;
+            background: var(--secondary); color: var(--accent); border: 1px solid var(--border);
+        }
+        footer {
+            background: var(--secondary); padding: 2rem 1rem; text-align: center;
+            border-top: 1px solid var(--border); margin-top: 3rem;
+        }
+        footer a { color: var(--primary); text-decoration: none; }
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.5rem; }
+            nav ul { gap: 0.75rem; }
+            .comparison-table { font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="risk-banner">
+        <strong>⚠️ Honest Assessment</strong>
+        <p>OpenClaw won't replace Bloomberg for institutional use. But for retail traders, it can replace multiple paid services at a fraction of the cost.</p>
+    </div>
+
+    <header>
+        <h1>💰 Economics: Cost Analysis</h1>
+        <p>Honest comparison: OpenClaw trading agent vs paid services</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="starter.html">Starter</a></li>
+            <li><a href="risk.html">Risk</a></li>
+            <li><a href="my-setup.html">My Setup</a></li>
+            <li><a href="economics.html" class="active">Economics</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Monthly Cost Breakdown -->
+        <section>
+            <h2>📊 Monthly Cost to Run OpenClaw Trading Stack</h2>
+            
+            <div class="tier-box">
+                <h4>Three Tiers Based on Your Needs</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <div class="cost-card">
+                        <h4>Free Tier</h4>
+                        <div class="amount">$0-10<span class="period">/month</span></div>
+                        <div class="breakdown">
+                            <div class="breakdown-item"><span>Hosting</span><span>$0 (home PC)</span></div>
+                            <div class="breakdown-item"><span>API Tokens</span><span>$5-10</span></div>
+                            <div class="breakdown-item"><span>Market Data</span><span>$0 (Yahoo Finance)</span></div>
+                        </div>
+                        <p style="margin-top: 1rem; font-size: 0.9rem;">Best for: Learning, monitoring, alerts</p>
+                    </div>
+                    
+                    <div class="cost-card" style="border-color: var(--primary);">
+                        <h4>Mid Tier ⭐</h4>
+                        <div class="amount">$25-70<span class="period">/month</span></div>
+                        <div class="breakdown">
+                            <div class="breakdown-item"><span>Hosting</span><span>$5-20 (VPS)</span></div>
+                            <div class="breakdown-item"><span>API Tokens</span><span>$20-50</span></div>
+                            <div class="breakdown-item"><span>Market Data</span><span>$0-30</span></div>
+                        </div>
+                        <p style="margin-top: 1rem; font-size: 0.9rem;">Best for: Serious swing traders</p>
+                    </div>
+                    
+                    <div class="cost-card">
+                        <h4>Power Tier</h4>
+                        <div class="amount">$100-250<span class="period">/month</span></div>
+                        <div class="breakdown">
+                            <div class="breakdown-item"><span>Hosting</span><span>$20-50 (dedicated VPS)</span></div>
+                            <div class="breakdown-item"><span>API Tokens</span><span>$50-150</span></div>
+                            <div class="breakdown-item"><span>Market Data</span><span>$30-100</span></div>
+                        </div>
+                        <p style="margin-top: 1rem; font-size: 0.9rem;">Best for: Active traders, multiple strategies</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparison Table -->
+        <section>
+            <h2>🆚 OpenClaw vs Paid Services</h2>
+            <p>Honest assessment of what you get (and what you don't) compared to established services.</p>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Monthly Cost</th>
+                        <th>What It Does</th>
+                        <th>OpenClaw Can Replace?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>TradingView Pro</strong></td>
+                        <td>$60/mo</td>
+                        <td>Charts, indicators, alerts, screeners</td>
+                        <td><span class="tag" style="background: rgba(0, 255, 136, 0.15); color: var(--success);">✓ Mostly</span> Charts no, but alerts/screeners yes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bloomberg Terminal</strong></td>
+                        <td>$2,000/mo</td>
+                        <td>Real-time data, news, analytics, trading</td>
+                        <td><span class="tag" style="background: rgba(255, 170, 0, 0.15); color: var(--warning);">⚡ Partially</span> ~20% of functionality for 5% of cost</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Seeking Alpha Premium</strong></td>
+                        <td>$29/mo ($240/yr)</td>
+                        <td>Analysis, transcripts, ratings</td>
+                        <td><span class="tag" style="background: rgba(0, 255, 136, 0.15); color: var(--success);">✓ Yes</span> Can scrape + summarize similar content</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Earnings Whispers</strong></td>
+                        <td>$19/mo</td>
+                        <td>Earnings calendar, estimates, sentiment</td>
+                        <td><span class="tag" style="background: rgba(0, 255, 136, 0.15); color: var(--success);">✓ Yes</span> Use their API directly or scrape</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Paid Signal Services</strong></td>
+                        <td>$50-500/mo</td>
+                        <td>Trade alerts, entry/exit signals</td>
+                        <td><span class="tag" style="background: rgba(0, 217, 255, 0.15); color: var(--accent);">⚡ Your Own</span> Build your own signals, more control</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Custom Algo Platforms</strong></td>
+                        <td>$100-1000/mo</td>
+                        <td>Backtesting, live trading, infrastructure</td>
+                        <td><span class="tag" style="background: rgba(0, 255, 136, 0.15); color: var(--success);">✓ Yes</span> OpenClaw + Alpaca = similar capability</td>
+                    </tr>
+                    <tr class="highlight">
+                        <td><strong>OpenClaw (Mid Tier)</strong></td>
+                        <td><strong>$25-70/mo</strong></td>
+                        <td>All of the above combined</td>
+                        <td><span class="tag verified">✓ You're Here</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="tier-box">
+                <h4>💡 Key Insight</h4>
+                <p>Most retail traders pay for 3-5 services separately (TradingView + Seeking Alpha + signal service + earnings data = $150-200/mo). 
+                OpenClaw consolidates these into one system for $25-70/mo. The tradeoff: you need to build and maintain it yourself.</p>
+            </div>
+        </section>
+
+        <!-- Break-Even Calculator -->
+        <section>
+            <h2>🧮 Break-Even Calculator</h2>
+            <p>Calculate how much you need to save or earn to justify building an OpenClaw trading agent.</p>
+            
+            <div class="calculator">
+                <h4>Current Monthly Subscription Costs</h4>
+                
+                <label>TradingView or similar charting service ($/month)</label>
+                <input type="number" id="tradingview" value="60" min="0">
+                
+                <label>Seeking Alpha or analysis service ($/month)</label>
+                <input type="number" id="seekingalpha" value="29" min="0">
+                
+                <label>Signal service or alerts ($/month)</label>
+                <input type="number" id="signals" value="100" min="0">
+                
+                <label>Earnings/data feeds ($/month)</label>
+                <input type="number" id="data" value="19" min="0">
+                
+                <label>Other trading tools ($/month)</label>
+                <input type="number" id="other" value="0" min="0">
+                
+                <div style="margin-top: 1.5rem;">
+                    <label>OpenClaw monthly cost (use $25-70 typical)</label>
+                    <input type="number" id="openclaw" value="50" min="0">
+                </div>
+                
+                <div class="result">
+                    <strong>Monthly Savings:</strong> $<span id="savings">158</span>/mo<br>
+                    <strong>Annual Savings:</strong> $<span id="annual">1896</span>/yr<br>
+                    <strong>Break-even:</strong> <span id="breakeven">1-2</span> months (vs building from scratch)
+                </div>
+            </div>
+
+            <script>
+                function calculate() {
+                    const total = 
+                        parseFloat(document.getElementById('tradingview').value) +
+                        parseFloat(document.getElementById('seekingalpha').value) +
+                        parseFloat(document.getElementById('signals').value) +
+                        parseFloat(document.getElementById('data').value) +
+                        parseFloat(document.getElementById('other').value);
+                    const openclaw = parseFloat(document.getElementById('openclaw').value);
+                    const savings = total - openclaw;
+                    const annual = savings * 12;
+                    const breakeven = savings > 0 ? Math.max(1, Math.round(100 / savings)) : 'N/A';
+                    
+                    document.getElementById('savings').textContent = savings.toFixed(0);
+                    document.getElementById('annual').textContent = annual.toFixed(0);
+                    document.getElementById('breakeven').textContent = breakeven;
+                }
+                
+                document.querySelectorAll('input').forEach(input => {
+                    input.addEventListener('input', calculate);
+                });
+                
+                calculate();
+            </script>
+        </section>
+
+        <!-- Token Usage Estimates -->
+        <section>
+            <h2>🎯 Token Usage Estimates by Use Case</h2>
+            <p>Based on Anthropic Claude pricing (as of 2026). Actual usage varies based on complexity.</p>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Use Case</th>
+                        <th>Tokens/Day</th>
+                        <th>Cost/Day</th>
+                        <th>Cost/Month</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Morning Briefing</td>
+                        <td>~5,000</td>
+                        <td>~$0.05</td>
+                        <td>~$1.50</td>
+                    </tr>
+                    <tr>
+                        <td>Price Alerts (15 min)</td>
+                        <td>~2,000</td>
+                        <td>~$0.02</td>
+                        <td>~$0.60</td>
+                    </tr>
+                    <tr>
+                        <td>Technical Analysis (on-demand)</td>
+                        <td>~10,000</td>
+                        <td>~$0.10</td>
+                        <td>~$3.00</td>
+                    </tr>
+                    <tr>
+                        <td>Earnings Summarizer</td>
+                        <td>~20,000</td>
+                        <td>~$0.20</td>
+                        <td>~$6.00</td>
+                    </tr>
+                    <tr>
+                        <td>Portfolio Reporter</td>
+                        <td>~5,000</td>
+                        <td>~$0.05</td>
+                        <td>~$1.50</td>
+                    </tr>
+                    <tr>
+                        <td><strong>All Combined</strong></td>
+                        <td><strong>~42,000</strong></td>
+                        <td><strong>~$0.42</strong></td>
+                        <td><strong>~$12.60</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="margin-top: 1rem; font-size: 0.9rem;">
+                Note: Claude pricing assumed at ~$10/1M tokens input, ~$30/1M tokens output. 
+                Actual costs depend on model choice (Haiku cheaper, Opus more expensive).
+            </p>
+        </section>
+
+        <!-- Time Investment -->
+        <section>
+            <h2>⏱️ Time Investment (The Hidden Cost)</h2>
+            <p>Building OpenClaw trading agents isn't free—you pay with time. Here's what to expect:</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                <div class="cost-card">
+                    <h4>Level 1-3 (Monitoring)</h4>
+                    <div class="amount">4-6<span class="period">hours total</span></div>
+                    <div class="breakdown">
+                        <div class="breakdown-item"><span>Setup OpenClaw</span><span>1 hour</span></div>
+                        <div class="breakdown-item"><span>Morning Briefing</span><span>15 min</span></div>
+                        <div class="breakdown-item"><span>Price Alerts</span><span>30 min</span></div>
+                        <div class="breakdown-item"><span>Earnings Tracker</span><span>45 min</span></div>
+                        <div class="breakdown-item"><span>Testing & Debug</span><span>2-3 hours</span></div>
+                    </div>
+                </div>
+                
+                <div class="cost-card">
+                    <h4>Level 4 (Analysis)</h4>
+                    <div class="amount">6-10<span class="period">hours total</span></div>
+                    <div class="breakdown">
+                        <div class="breakdown-item"><span>Technical Scanner</span><span>2-3 hours</span></div>
+                        <div class="breakdown-item"><span>Fundamental Analysis</span><span>2-3 hours</span></div>
+                        <div class="breakdown-item"><span>Prompt Engineering</span><span>2-4 hours</span></div>
+                    </div>
+                </div>
+                
+                <div class="cost-card">
+                    <h4>Level 5 (Trading)</h4>
+                    <div class="amount">20-40<span class="period">hours total</span></div>
+                    <div class="breakdown">
+                        <div class="breakdown-item"><span>Broker API Integration</span><span>4-8 hours</span></div>
+                        <div class="breakdown-item"><span>Strategy Development</span><span>8-20 hours</span></div>
+                        <div class="breakdown-item"><span>Backtesting</span><span>4-8 hours</span></div>
+                        <div class="breakdown-item"><span>Paper Trading Setup</span><span>4-8 hours</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tier-box">
+                <h4>💡 Is It Worth Your Time?</h4>
+                <p>If you value your time at $50/hour and spend 20 hours building:</p>
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Break-even:</strong> 4-5 months (vs $150/mo in subscriptions)</li>
+                    <li><strong>Year 1 value:</strong> $1,800 saved - (20 hrs × $50) = $800 net gain</li>
+                    <li><strong>Ongoing:</strong> $1,800/year savings after initial build</li>
+                </ul>
+                <p style="margin-top: 1rem;"><strong>But the real value:</strong> You own the system, can customize it, and it works exactly how you want.</p>
+            </div>
+        </section>
+
+        <!-- What You Give Up -->
+        <section>
+            <h2>⚠️ What You Give Up (Honest Tradeoffs)</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                <div class="cost-card" style="border-color: var(--warning);">
+                    <h4 style="color: var(--warning);">❌ No Polished UI</h4>
+                    <p>TradingView has beautiful charts. OpenClaw delivers text/tables via chat. You can build UI, but that's more work.</p>
+                </div>
+                
+                <div class="cost-card" style="border-color: var(--warning);">
+                    <h4 style="color: var(--warning);">❌ You're the Support Team</h4>
+                    <p>When something breaks, you fix it. No support ticket. No SLA. Just you and the logs.</p>
+                </div>
+                
+                <div class="cost-card" style="border-color: var(--warning);">
+                    <h4 style="color: var(--warning);">❌ Maintenance Overhead</h4>
+                    <p>APIs change. Websites update layouts. Dependencies break. Budget 1-2 hours/month for maintenance.</p>
+                </div>
+                
+                <div class="cost-card" style="border-color: var(--warning);">
+                    <h4 style="color: var(--warning);">❌ Latency</h4>
+                    <p>OpenClaw is not HFT. Browser automation + API calls + model inference = seconds to minutes. Fine for swing trading, not for scalping.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Verdict -->
+        <section>
+            <h2>🎯 Final Verdict: Who Should Build This?</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                <div class="tier-box" style="border-color: var(--success);">
+                    <h4 style="color: var(--success);">✓ BUILD IF...</h4>
+                    <ul>
+                        <li>You enjoy tinkering and learning</li>
+                        <li>You're comfortable with basic coding</li>
+                        <li>You want full control and customization</li>
+                        <li>You're okay with maintenance tradeoffs</li>
+                        <li>You want to save $100-200/mo long-term</li>
+                    </ul>
+                </div>
+                
+                <div class="cost-card" style="border-color: var(--danger);">
+                    <h4 style="color: var(--danger);">✗ DON'T BUILD IF...</h4>
+                    <ul>
+                        <li>You want a polished, supported product</li>
+                        <li>You hate debugging and troubleshooting</li>
+                        <li>You need sub-second latency</li>
+                        <li>Your time is worth $500+/hour</li>
+                        <li>You just want to trade, not build tools</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <div class="last-updated" style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin: 2rem 0; padding-top: 2rem; border-top: 1px solid var(--border);">
+            Last updated: <strong>2026-03-29</strong> | 
+            <a href="index.html" style="color: var(--primary);">← Back to Home</a> |
+            Prices subject to change
+        </div>
+    </main>
+
+    <footer>
+        <p>Built with 🦞 | <a href="https://docs.openclaw.ai">OpenClaw Docs</a> | <a href="https://discord.gg/clawd">Discord</a></p>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+            ⚠️ Not financial advice. Prices and estimates as of 2026. Your mileage may vary.
+        </p>
+    </footer>
+</body>
+</html>

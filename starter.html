@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starter Guide - Your First Trading Agent in 1 Hour | OpenClaw Trading</title>
+    <meta name="description" content="Step-by-step guide to building your first OpenClaw trading agent. Start with zero-risk automations and progressively add complexity.">
+    <meta name="keywords" content="OpenClaw tutorial, trading bot setup, AI trading beginner, algorithmic trading guide">
+    
+    <style>
+        :root {
+            --primary: #ff6b35; --primary-dark: #e55a2b; --secondary: #1a1a2e;
+            --accent: #00d9ff; --bg: #0f0f1a; --bg-card: #16162a;
+            --bg-card-hover: #1f1f3a; --text: #e8e8f0; --text-muted: #a0a0b0;
+            --border: #2a2a4a; --success: #00ff88; --warning: #ffaa00; --danger: #ff4466;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg); color: var(--text); line-height: 1.6;
+        }
+        .risk-banner {
+            background: linear-gradient(135deg, #2a1a1a 0%, #1a1a2e 100%);
+            border-bottom: 2px solid var(--danger); padding: 1rem; text-align: center;
+        }
+        .risk-banner strong { color: var(--danger); text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
+        .risk-banner p { color: var(--text-muted); font-size: 0.9rem; max-width: 900px; margin: 0 auto; }
+        header {
+            background: var(--secondary); padding: 2rem 1rem; text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        header h1 {
+            font-size: 2rem; margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        header p { color: var(--text-muted); max-width: 700px; margin: 0 auto; }
+        nav {
+            background: var(--bg-card); padding: 1rem; position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+        nav ul { display: flex; justify-content: center; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+        nav a { color: var(--text); text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; transition: all 0.2s; }
+        nav a:hover, nav a.active { background: var(--primary); color: white; }
+        main { max-width: 1000px; margin: 0 auto; padding: 2rem 1rem; }
+        section { margin-bottom: 3rem; }
+        h2 {
+            font-size: 1.6rem; margin-bottom: 1.25rem; padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 0.75rem;
+        }
+        h3 { font-size: 1.2rem; margin: 1.5rem 0 0.75rem; color: var(--text); }
+        p { color: var(--text-muted); margin-bottom: 1rem; }
+        ul, ol { color: var(--text-muted); margin-bottom: 1rem; padding-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        .step-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+            padding: 1.5rem; margin-bottom: 1.5rem;
+        }
+        .step-card h4 { color: var(--primary); font-size: 1.1rem; margin-bottom: 0.75rem; }
+        .step-number {
+            display: inline-block; width: 32px; height: 32px; background: var(--primary);
+            color: white; border-radius: 50%; text-align: center; line-height: 32px;
+            font-weight: bold; margin-right: 0.75rem;
+        }
+        .warning-box {
+            background: rgba(255, 68, 102, 0.1); border: 1px solid var(--danger);
+            border-radius: 8px; padding: 1rem; margin: 1.5rem 0;
+        }
+        .warning-box strong { color: var(--danger); display: block; margin-bottom: 0.5rem; }
+        .success-box {
+            background: rgba(0, 255, 136, 0.1); border: 1px solid var(--success);
+            border-radius: 8px; padding: 1rem; margin: 1.5rem 0;
+        }
+        .success-box strong { color: var(--success); display: block; margin-bottom: 0.5rem; }
+        code {
+            background: var(--code-bg); padding: 0.2rem 0.5rem; border-radius: 4px;
+            font-family: 'Monaco', 'Consolas', monospace; font-size: 0.9em; color: var(--accent);
+        }
+        pre {
+            background: var(--code-bg); padding: 1rem; border-radius: 8px; overflow-x: auto;
+            margin: 1rem 0; border: 1px solid var(--border);
+        }
+        pre code { background: none; padding: 0; }
+        .tag {
+            display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px;
+            font-size: 0.8rem; margin-right: 0.5rem; margin-bottom: 0.5rem;
+            background: var(--secondary); color: var(--accent); border: 1px solid var(--border);
+        }
+        .tag.verified { background: rgba(0, 255, 136, 0.15); color: var(--success); border-color: var(--success); }
+        .progress-track {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+            padding: 1.5rem; margin-bottom: 2rem;
+        }
+        .progress-item {
+            display: flex; align-items: center; gap: 1rem; padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .progress-item:last-child { border-bottom: none; }
+        .progress-item.done { color: var(--success); }
+        .progress-item .check { color: var(--success); font-weight: bold; }
+        footer {
+            background: var(--secondary); padding: 2rem 1rem; text-align: center;
+            border-top: 1px solid var(--border); margin-top: 3rem;
+        }
+        footer a { color: var(--primary); text-decoration: none; }
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.5rem; }
+            nav ul { gap: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="risk-banner">
+        <strong>⚠️ NOT Financial Advice</strong>
+        <p>Educational purposes only. Start with paper trading. You are responsible for compliance with regulations in your jurisdiction.</p>
+    </div>
+
+    <header>
+        <h1>🚀 Starter Guide: Your First Trading Agent in 1 Hour</h1>
+        <p>Start with zero-risk automations and progressively unlock more complexity</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="starter.html" class="active">Starter Guide</a></li>
+            <li><a href="my-setup.html">My Setup</a></li>
+            <li><a href="risk.html">Risk</a></li>
+            <li><a href="economics.html">Economics</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Progress Tracker -->
+        <section>
+            <div class="progress-track">
+                <h3 style="margin-top: 0;">📋 Your Learning Path</h3>
+                <div class="progress-item">
+                    <span class="check">✓</span>
+                    <span><strong>Level 1:</strong> Morning Market Briefing (15 min, zero risk)</span>
+                </div>
+                <div class="progress-item">
+                    <span class="check">✓</span>
+                    <span><strong>Level 2:</strong> Watchlist Price Alerts (30 min, zero risk)</span>
+                </div>
+                <div class="progress-item">
+                    <span class="check">✓</span>
+                    <span><strong>Level 3:</strong> Earnings Calendar Tracker (45 min, zero risk)</span>
+                </div>
+                <div class="progress-item">
+                    <span>○</span>
+                    <span><strong>Level 4:</strong> Technical Indicator Scanner (2 hours, low risk)</span>
+                </div>
+                <div class="progress-item">
+                    <span>○</span>
+                    <span><strong>Level 5:</strong> Paper Trading Bot (4+ hours, zero financial risk)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Prerequisites -->
+        <section>
+            <h2>📦 Prerequisites</h2>
+            <div class="step-card">
+                <h4>Before You Start</h4>
+                <ul>
+                    <li>OpenClaw installed and running (<code>openclaw --version</code>)</li>
+                    <li>Telegram connected (or your preferred messaging channel)</li>
+                    <li>Basic comfort with terminal commands</li>
+                    <li>~1 hour of uninterrupted time for Level 1-3</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Level 1 -->
+        <section>
+            <h2><span class="step-number">1</span>Level 1: Morning Market Briefing (15 minutes)</h2>
+            <p><strong>What it does:</strong> Every morning at 7am SGT, delivers overnight US market summary, pre-market movers, SGX open preview, and earnings today.</p>
+            <p><strong>Risk Level:</strong> <span class="tag verified">✓ Zero Risk</span> (Information only)</p>
+            <p><strong>Time to complete:</strong> 15 minutes</p>
+
+            <div class="step-card">
+                <h4>Step 1: Create the Skill</h4>
+                <pre><code>cd ~/.openclaw/workspace/skills
+mkdir market-briefing
+cd market-briefing</code></pre>
+            </div>
+
+            <div class="step-card">
+                <h4>Step 2: Create SKILL.md</h4>
+                <pre><code># Market Briefing Skill
+
+## Purpose
+Generate daily morning market briefing for Singapore timezone.
+
+## Data Sources
+- Yahoo Finance (yfinance Python library)
+- Investing.com (web scraping)
+
+## Output Format
+Deliver to Telegram every weekday at 7:00 AM SGT:
+1. US Market Summary (Dow, S&P, Nasdaq overnight performance)
+2. Pre-market movers (top 5 gainers/losers)
+3. SGX Preview (STI futures, key stocks to watch)
+4. Earnings Today (US + SGX)
+5. Economic Calendar (today's key data releases)
+
+## Risk Controls
+- Information only, no recommendations
+- Cite sources for all data
+- Flag any data that is delayed or estimated</code></pre>
+            </div>
+
+            <div class="step-card">
+                <h4>Step 3: Create the Python Script</h4>
+                <pre><code>#!/usr/bin/env python3
+# save as: market_briefing.py
+
+import yfinance as yf
+from datetime import datetime
+import requests
+
+def get_us_market_summary():
+    """Get overnight US market performance"""
+    indices = {
+        'Dow': '^DJI',
+        'S&P 500': '^GSPC',
+        'Nasdaq': '^IXIC'
+    }
+    summary = []
+    for name, ticker in indices.items():
+        data = yf.Ticker(ticker)
+        hist = data.history(period='2d')
+        if len(hist) >= 2:
+            change = ((hist['Close'].iloc[-1] - hist['Close'].iloc[-2]) / hist['Close'].iloc[-2]) * 100
+            summary.append(f"{name}: {hist['Close'].iloc[-1]:,.0f} ({change:+.2f}%)")
+    return '\n'.join(summary)
+
+def get_earnings_today():
+    """Get today's earnings (simplified - use API in production)"""
+    # In production, use Earnings Whispers API or similar
+    return "Check earnings calendar API"
+
+if __name__ == '__main__':
+    print("🌅 Morning Market Briefing")
+    print("=" * 40)
+    print(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M')} SGT\n")
+    print("📈 US Market Overnight:")
+    print(get_us_market_summary())
+    print("\n💰 Earnings Today:")
+    print(get_earnings_today())</code></pre>
+            </div>
+
+            <div class="step-card">
+                <h4>Step 4: Set Up Cron Job</h4>
+                <pre><code># Edit crontab
+crontab -e
+
+# Add this line (weekday mornings at 7am SGT):
+0 7 * * 1-5 cd ~/.openclaw/workspace/skills/market-briefing && python3 market_briefing.py | openclaw send --to telegram --message "stdin"</code></pre>
+            </div>
+
+            <div class="success-box">
+                <strong>✅ Success Criteria</strong>
+                You should receive a Telegram message every weekday at 7am with market summary. Test by running the script manually first.
+            </div>
+        </section>
+
+        <!-- Level 2 -->
+        <section>
+            <h2><span class="step-number">2</span>Level 2: Watchlist Price Alerts (30 minutes)</h2>
+            <p><strong>What it does:</strong> Monitors your watchlist every 15 minutes during trading hours. Sends Telegram alerts when price moves ±3% or volume spikes 2x average.</p>
+            <p><strong>Risk Level:</strong> <span class="tag verified">✓ Zero Risk</span> (Alerts only, no execution)</p>
+            <p><strong>Time to complete:</strong> 30 minutes</p>
+
+            <div class="step-card">
+                <h4>Step 1: Create Your Watchlist</h4>
+                <pre><code># Create watchlist.txt in your skills directory
+# Example:
+DBS.SI
+UOB.SI
+OCBC.SI
+AAPL
+MSFT
+NVDA
+TSLA</code></pre>
+            </div>
+
+            <div class="step-card">
+                <h4>Step 2: Create Alert Script</h4>
+                <pre><code>#!/usr/bin/env python3
+# save as: price_alerts.py
+
+import yfinance as yf
+import json
+from datetime import datetime
+
+WATCHLIST_FILE = 'watchlist.txt'
+STATE_FILE = 'price_state.json'
+ALERT_THRESHOLD = 3.0  # percent
+
+def load_watchlist():
+    with open(WATCHLIST_FILE) as f:
+        return [line.strip() for line in f if line.strip()]
+
+def load_state():
+    try:
+        with open(STATE_FILE) as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+
+def save_state(state):
+    with open(STATE_FILE, 'w') as f:
+        json.dump(state, f)
+
+def check_alerts():
+    watchlist = load_watchlist()
+    state = load_state()
+    alerts = []
+    
+    for ticker in watchlist:
+        try:
+            data = yf.Ticker(ticker)
+            hist = data.history(period='1d', interval='15m')
+            if len(hist) < 2:
+                continue
+            
+            current = hist['Close'].iloc[-1]
+            previous = state.get(ticker, {}).get('price', current)
+            avg_volume = hist['Volume'].mean()
+            current_volume = hist['Volume'].iloc[-1]
+            
+            # Price change alert
+            pct_change = ((current - previous) / previous) * 100
+            if abs(pct_change) >= ALERT_THRESHOLD:
+                direction = "📈" if pct_change > 0 else "📉"
+                alerts.append(f"{direction} {ticker}: {current:.2f} ({pct_change:+.2f}%)")
+            
+            # Volume spike alert
+            if current_volume > 2 * avg_volume:
+                alerts.append(f"🔊 {ticker}: Volume spike! {current_volume/1e6:.1f}M (2x avg)")
+            
+            # Update state
+            state[ticker] = {'price': current, 'time': datetime.now().isoformat()}
+            
+        except Exception as e:
+            print(f"Error checking {ticker}: {e}")
+    
+    save_state(state)
+    return alerts
+
+if __name__ == '__main__':
+    alerts = check_alerts()
+    if alerts:
+        message = "🚨 Price Alerts\n\n" + "\n".join(alerts)
+        print(message)
+        # Pipe to openclaw send or use API
+    else:
+        print("No alerts")</code></pre>
+            </div>
+
+            <div class="step-card">
+                <h4>Step 3: Set Up Cron (Trading Hours Only)</h4>
+                <pre><code># SGX: 9am-5pm SGT, US: 9:30pm-4am SGT
+# Run every 15 minutes during SGX hours:
+*/15 9-16 * * 1-5 cd ~/.openclaw/workspace/skills/price-alerts && python3 price_alerts.py | grep -v "No alerts" | openclaw send --to telegram --message "stdin"
+
+# US market hours (9:30pm-4am SGT = 13:30-20:00 UTC):
+*/15 13-20 * * 1-5 cd ~/.openclaw/workspace/skills/price-alerts && python3 price_alerts.py | grep -v "No alerts" | openclaw send --to telegram --message "stdin"</code></pre>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Important</strong>
+                Yahoo Finance has 15-minute delay for SGX stocks. Not suitable for intraday trading. Use for swing trading alerts only.
+            </div>
+        </section>
+
+        <!-- Level 3 -->
+        <section>
+            <h2><span class="step-number">3</span>Level 3: Earnings Calendar Tracker (45 minutes)</h2>
+            <p><strong>What it does:</strong> Tracks earnings dates for your watchlist. Sends pre-earnings research summaries and post-earnings results.</p>
+            <p><strong>Risk Level:</strong> <span class="tag verified">✓ Zero Risk</span> (Research only)</p>
+            <p><strong>Time to complete:</strong> 45 minutes</p>
+
+            <div class="step-card">
+                <h4>Implementation Overview</h4>
+                <ol>
+                    <li>Use Earnings Whispers API or scrape earnings calendar sites</li>
+                    <li>Filter for your watchlist stocks</li>
+                    <li>Send pre-earnings briefing (analyst estimates, recent performance)</li>
+                    <li>Send post-earnings results (beat/miss, guidance changes)</li>
+                </ol>
+            </div>
+
+            <div class="success-box">
+                <strong>✅ You've Completed Level 3!</strong>
+                You now have three zero-risk automations running:
+                <ul>
+                    <li>✓ Morning briefing (7am daily)</li>
+                    <li>✓ Price alerts (every 15 min during market hours)</li>
+                    <li>✓ Earnings tracking (as needed)</li>
+                </ul>
+                <p>Ready to move to Level 4? You'll start working with technical indicators.</p>
+            </div>
+        </section>
+
+        <!-- Level 4 Preview -->
+        <section>
+            <h2><span class="step-number">4</span>Level 4: Technical Indicator Scanner (Coming Next)</h2>
+            <p><strong>What it does:</strong> Scans watchlist for RSI oversold/overbought conditions, MACD crossovers, and moving average signals.</p>
+            <p><strong>Risk Level:</strong> <span class="tag potential">⚡ Low-Medium Risk</span> (Signals only, but may influence trading decisions)</p>
+            <p><strong>Time to complete:</strong> 2-3 hours</p>
+            <p><strong>Prerequisites:</strong> Complete Levels 1-3, comfortable with Python and technical analysis basics</p>
+            
+            <p><a href="analysis.html#technical-scanner" class="tag">→ View Full Level 4 Guide</a></p>
+        </section>
+
+        <!-- Level 5 Preview -->
+        <section>
+            <h2><span class="step-number">5</span>Level 5: Paper Trading Bot (Final Level)</h2>
+            <p><strong>What it does:</strong> Executes real trades on Alpaca paper trading account. Tests your strategy with zero financial risk.</p>
+            <p><strong>Risk Level:</strong> <span class="tag verified">✓ Zero Financial Risk</span> (Paper trading only)</p>
+            <p><strong>Time to complete:</strong> 4-8 hours (including strategy development and backtesting)</p>
+            <p><strong>Prerequisites:</strong> Complete Levels 1-4, have a tested trading strategy, understand risk management</p>
+
+            <div class="warning-box">
+                <strong>⚠️ Critical: Before Level 5</strong>
+                <ul>
+                    <li>✅ Paper trade for at least 3 months before considering live trading</li>
+                    <li>✅ Backtest your strategy against historical data</li>
+                    <li>✅ Implement position limits and daily loss limits</li>
+                    <li>✅ Set up kill switch (Telegram command to halt all trading)</li>
+                    <li>✅ Never skip the paper trading phase</li>
+                </ul>
+            </div>
+            
+            <p><a href="automated-trading.html#paper-trading" class="tag">→ View Full Level 5 Guide</a></p>
+        </section>
+
+        <!-- Next Steps -->
+        <section>
+            <h2>🎯 What's Next?</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                <a href="my-setup.html" class="step-card" style="text-decoration: none; color: inherit;">
+                    <h4>🖥️ My Setup (Singapore)</h4>
+                    <p style="font-size: 0.9rem;">See how I run this on an N150 mini PC with SGX/US market focus</p>
+                </a>
+                <a href="risk.html" class="step-card" style="text-decoration: none; color: inherit;">
+                    <h4>🛡️ Risk Framework</h4>
+                    <p style="font-size: 0.9rem;">Security, API key management, kill switches, compliance</p>
+                </a>
+                <a href="economics.html" class="step-card" style="text-decoration: none; color: inherit;">
+                    <h4>💰 Cost Analysis</h4>
+                    <p style="font-size: 0.9rem;">Compare costs vs TradingView, Bloomberg, paid signal services</p>
+                </a>
+            </div>
+        </section>
+
+        <div class="last-updated" style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin: 2rem 0; padding-top: 2rem; border-top: 1px solid var(--border);">
+            Last updated: <strong>2026-03-29</strong> | 
+            <a href="index.html" style="color: var(--primary);">← Back to Home</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>Built with 🦞 | <a href="https://docs.openclaw.ai">OpenClaw Docs</a> | <a href="https://discord.gg/clawd">Discord</a></p>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+            ⚠️ Not financial advice. Paper trade first. You are responsible for your trading decisions.
+        </p>
+    </footer>
+</body>
+</html>

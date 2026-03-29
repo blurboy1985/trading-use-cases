@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risk & Compliance Framework | OpenClaw Trading</title>
+    <meta name="description" content="Comprehensive risk framework for AI-assisted trading. Security, compliance, kill switches, and failure mode analysis.">
+    
+    <style>
+        :root {
+            --primary: #ff6b35; --primary-dark: #e55a2b; --secondary: #1a1a2e;
+            --accent: #00d9ff; --bg: #0f0f1a; --bg-card: #16162a;
+            --bg-card-hover: #1f1f3a; --text: #e8e8f0; --text-muted: #a0a0b0;
+            --border: #2a2a4a; --success: #00ff88; --warning: #ffaa00; --danger: #ff4466;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg); color: var(--text); line-height: 1.6;
+        }
+        .risk-banner {
+            background: linear-gradient(135deg, #2a1a1a 0%, #1a1a2e 100%);
+            border-bottom: 2px solid var(--danger); padding: 1rem; text-align: center;
+        }
+        .risk-banner strong { color: var(--danger); text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
+        .risk-banner p { color: var(--text-muted); font-size: 0.9rem; max-width: 900px; margin: 0 auto; }
+        header {
+            background: var(--secondary); padding: 2rem 1rem; text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        header h1 {
+            font-size: 2rem; margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        header p { color: var(--text-muted); max-width: 700px; margin: 0 auto; }
+        nav {
+            background: var(--bg-card); padding: 1rem; position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+        nav ul { display: flex; justify-content: center; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+        nav a { color: var(--text); text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; transition: all 0.2s; }
+        nav a:hover, nav a.active { background: var(--primary); color: white; }
+        main { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem; }
+        section { margin-bottom: 3rem; }
+        h2 {
+            font-size: 1.6rem; margin-bottom: 1.25rem; padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 0.75rem;
+        }
+        h3 { font-size: 1.2rem; margin: 1.5rem 0 0.75rem; color: var(--text); }
+        p { color: var(--text-muted); margin-bottom: 1rem; }
+        ul, ol { color: var(--text-muted); margin-bottom: 1rem; padding-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        .critical-box {
+            background: rgba(255, 68, 102, 0.15); border: 2px solid var(--danger);
+            border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0;
+        }
+        .critical-box h4 { color: var(--danger); font-size: 1.1rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+        .critical-box ul { margin-bottom: 0; }
+        .warning-box {
+            background: rgba(255, 170, 0, 0.1); border: 1px solid var(--warning);
+            border-radius: 8px; padding: 1rem; margin: 1.5rem 0;
+        }
+        .warning-box strong { color: var(--warning); display: block; margin-bottom: 0.5rem; }
+        .success-box {
+            background: rgba(0, 255, 136, 0.1); border: 1px solid var(--success);
+            border-radius: 8px; padding: 1rem; margin: 1.5rem 0;
+        }
+        .success-box strong { color: var(--success); display: block; margin-bottom: 0.5rem; }
+        code {
+            background: #0d0d1a; padding: 0.2rem 0.5rem; border-radius: 4px;
+            font-family: 'Monaco', 'Consolas', monospace; font-size: 0.9em; color: var(--accent);
+        }
+        pre {
+            background: #0d0d1a; padding: 1rem; border-radius: 8px; overflow-x: auto;
+            margin: 1rem 0; border: 1px solid var(--border);
+        }
+        pre code { background: none; padding: 0; }
+        .checklist {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0;
+        }
+        .checklist-item {
+            display: flex; align-items: flex-start; gap: 0.75rem;
+            padding: 0.75rem 0; border-bottom: 1px solid var(--border);
+        }
+        .checklist-item:last-child { border-bottom: none; }
+        .checklist-item input[type="checkbox"] { margin-top: 0.25rem; }
+        .tag {
+            display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px;
+            font-size: 0.8rem; margin-right: 0.5rem; margin-bottom: 0.5rem;
+            background: var(--secondary); color: var(--accent); border: 1px solid var(--border);
+        }
+        .tag.danger { background: rgba(255, 68, 102, 0.15); color: var(--danger); border-color: var(--danger); }
+        .tag.warning { background: rgba(255, 170, 0, 0.15); color: var(--warning); border-color: var(--warning); }
+        table {
+            width: 100%; border-collapse: collapse; margin: 1.5rem 0;
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+        }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: var(--secondary); color: var(--text); font-weight: 600; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background: var(--bg-card-hover); }
+        footer {
+            background: var(--secondary); padding: 2rem 1rem; text-align: center;
+            border-top: 1px solid var(--border); margin-top: 3rem;
+        }
+        footer a { color: var(--primary); text-decoration: none; }
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.5rem; }
+            nav ul { gap: 0.75rem; }
+            table { font-size: 0.85rem; }
+            th, td { padding: 0.75rem 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="risk-banner">
+        <strong>⚠️ CRITICAL: Read This First</strong>
+        <p>AI agents WILL hallucinate financial data. Never deploy automated trading without extensive paper trading. You are responsible for all trading decisions and regulatory compliance.</p>
+    </div>
+
+    <header>
+        <h1>🛡️ Risk & Compliance Framework</h1>
+        <p>Comprehensive security, risk management, and regulatory considerations for AI-assisted trading</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="starter.html">Starter</a></li>
+            <li><a href="risk.html" class="active">Risk</a></li>
+            <li><a href="my-setup.html">My Setup</a></li>
+            <li><a href="economics.html">Economics</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Critical Warnings -->
+        <section>
+            <div class="critical-box">
+                <h4>🚨 Non-Negotiable Rules</h4>
+                <ul>
+                    <li><strong>NEVER</strong> give an agent withdrawal permissions on day one (or ever, if possible)</li>
+                    <li><strong>ALWAYS</strong> start with read-only API keys, graduate to trading permissions only after extensive paper trading</li>
+                    <li><strong>ALWAYS</strong> paper trade for at least 3 months before live deployment</li>
+                    <li><strong>NEVER</strong> run automated trading without a kill switch</li>
+                    <li><strong>ALWAYS</strong> rotate API keys regularly and use IP allowlists</li>
+                    <li><strong>NEVER</strong> store API keys, wallet addresses, or credentials in workspace files</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Failure Modes -->
+        <section>
+            <h2>💥 Common Failure Modes (With Real Examples)</h2>
+            
+            <div class="warning-box">
+                <strong>1. Hallucinated Financial Data</strong>
+                <p>AI agents can confidently state incorrect prices, earnings figures, or analyst ratings. This is the #1 risk.</p>
+                <p><strong>Real example:</strong> Agent reported AAPL earnings beat by $0.50 when actual miss was $0.30. User nearly traded on false info.</p>
+                <p><strong>Mitigation:</strong> Always verify critical data against primary sources before trading. Build cross-checks into your agent.</p>
+            </div>
+
+            <div class="warning-box">
+                <strong>2. Latency Issues (Not HFT)</strong>
+                <p>OpenClaw is NOT suitable for high-frequency trading. Browser automation, API calls, and model inference add seconds to minutes of latency.</p>
+                <p><strong>Real example:</strong> User's breakout strategy failed because by the time agent detected and executed, price had already moved 2%.</p>
+                <p><strong>Mitigation:</strong> Use for swing trading (hours/days), not intraday. Understand your latency budget.</p>
+            </div>
+
+            <div class="warning-box">
+                <strong>3. API Rate Limits</strong>
+                <p>Free tier APIs have strict rate limits. Exceeding them causes missed signals or failed orders.</p>
+                <p><strong>Real example:</strong> Alpha Vantage free tier (5/min) hit limit during volatile market, missed 3 entry points.</p>
+                <p><strong>Mitigation:</strong> Monitor API usage. Implement exponential backoff. Upgrade to paid tier for production.</p>
+            </div>
+
+            <div class="warning-box">
+                <strong>4. Backtest ≠ Live Performance</strong>
+                <p>Strategies that look great in backtest often fail live due to slippage, fees, and market impact.</p>
+                <p><strong>Real example:</strong> Mean reversion strategy showed 40% annual return in backtest, lost 15% in first month live.</p>
+                <p><strong>Mitigation:</strong> Paper trade extensively. Include realistic slippage and fees in backtests.</p>
+            </div>
+
+            <div class="warning-box">
+                <strong>5. Agent Runaway</strong>
+                <p>Bugs in logic can cause repeated unwanted trades (e.g., buy signal triggers 10x in one minute).</p>
+                <p><strong>Real example:</strong> User's DCA bot bought $10k of BTC instead of $1k due to loop bug.</p>
+                <p><strong>Mitigation:</strong> Implement per-trade and daily limits. Use idempotency keys. Monitor actively.</p>
+            </div>
+        </section>
+
+        <!-- Security Checklist -->
+        <section>
+            <h2>🔒 Security Checklist</h2>
+            <div class="checklist">
+                <div class="checklist-item">
+                    <input type="checkbox" id="sec1">
+                    <label for="sec1"><strong>API Key Security:</strong> Store keys in environment variables, never in workspace files or SOUL.md</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="sec2">
+                    <label for="sec2"><strong>Key Permissions:</strong> Use trade-only keys, disable withdrawal permissions</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="sec3">
+                    <label for="sec3"><strong>IP Allowlisting:</strong> Enable IP allowlist on all broker/exchange accounts</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="sec4">
+                    <label for="sec4"><strong>2FA:</strong> Enable two-factor authentication on all trading accounts</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="sec5">
+                    <label for="sec5"><strong>Key Rotation:</strong> Rotate API keys every 30-90 days</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="sec6">
+                    <label for="sec6"><strong>Sandboxing:</strong> Run trading agents in isolated sessions with limited permissions</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="sec7">
+                    <label for="sec7"><strong>Audit Logging:</strong> Log all agent decisions and executions for review</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="sec8">
+                    <label for="sec8"><strong>Network Security:</strong> Use firewall rules, don't expose Gateway publicly without auth</label>
+                </div>
+            </div>
+        </section>
+
+        <!-- Position Limits -->
+        <section>
+            <h2>📊 Position Limits & Risk Management</h2>
+            <p>Encode these rules in your SOUL.md or agent configuration:</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rule</th>
+                        <th>Beginner</th>
+                        <th>Intermediate</th>
+                        <th>Advanced</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Max position size</td>
+                        <td>2% of portfolio</td>
+                        <td>5% of portfolio</td>
+                        <td>10% of portfolio</td>
+                    </tr>
+                    <tr>
+                        <td>Max daily loss</td>
+                        <td>1% of portfolio</td>
+                        <td>2% of portfolio</td>
+                        <td>3% of portfolio</td>
+                    </tr>
+                    <tr>
+                        <td>Max concurrent positions</td>
+                        <td>3 positions</td>
+                        <td>10 positions</td>
+                        <td>20 positions</td>
+                    </tr>
+                    <tr>
+                        <td>Stop-loss requirement</td>
+                        <td>Mandatory</td>
+                        <td>Mandatory</td>
+                        <td>Strategy-dependent</td>
+                    </tr>
+                    <tr>
+                        <td>Leverage allowed</td>
+                        <td>None (1x)</td>
+                        <td>2x max</td>
+                        <td>Strategy-dependent</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Kill Switch -->
+        <section>
+            <h2>🔴 Kill Switch Patterns</h2>
+            <p>Every automated trading agent MUST have an emergency stop mechanism.</p>
+
+            <h3>Pattern 1: Telegram Command Kill Switch</h3>
+            <pre><code># In your trading agent's SOUL.md or config:
+
+## Kill Switch Commands
+- /killswitch HALT - Immediately stop all trading, cancel open orders
+- /killswitch STATUS - Show current kill switch status
+- /killswitch RESUME - Resume trading (requires manual confirmation)
+
+## Implementation
+When /killswitch HALT is received:
+1. Cancel all open orders via broker API
+2. Set trading_enabled = false in state file
+3. Send confirmation to Telegram
+4. Log the event with timestamp and reason
+5. Require manual /killswitch RESUME to restart</code></pre>
+
+            <h3>Pattern 2: Time-Based Auto-Shutoff</h3>
+            <pre><code># Agent automatically stops trading:
+- After 3 consecutive losing trades
+- After hitting daily loss limit
+- Outside of defined trading hours
+- When volatility exceeds threshold (e.g., VIX > 40)</code></pre>
+
+            <h3>Pattern 3: Human Approval Gate</h3>
+            <pre><code># For high-risk actions, require human approval:
+- Any trade > 5% of portfolio
+- Any options trade
+- First trade of the day
+- Trades during earnings announcements
+
+Agent sends: "🚨 Approval Required: Buy 50 NVDA @ $450 ($22,500, 5% of portfolio). Reply YES to confirm, NO to cancel."</code></pre>
+        </section>
+
+        <!-- Regulatory Overview -->
+        <section>
+            <h2>⚖️ Regulatory Overview (High-Level, Not Legal Advice)</h2>
+            <div class="warning-box">
+                <strong>⚠️ This is NOT legal advice. Consult a qualified attorney in your jurisdiction.</strong>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Jurisdiction</th>
+                        <th>Regulator</th>
+                        <th>Key Considerations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>United States</strong></td>
+                        <td>SEC, FINRA, CFTC</td>
+                        <td>Pattern Day Trader rule (25k min for 4+ day trades/week). Advisers Act may apply if managing others' money. Tax: wash sale rules.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Singapore</strong></td>
+                        <td>MAS</td>
+                        <td>Personal trading generally unregulated. Crypto trading legal but unregulated (MAS warnings apply). No PDT rule. Tax: no capital gains tax.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>United Kingdom</strong></td>
+                        <td>FCA</td>
+                        <td>Personal trading unregulated. Crypto regulated for AML. Tax: capital gains tax applies, annual allowance £6,000 (2024).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>European Union</strong></td>
+                        <td>ESMA, national regulators</td>
+                        <td>MiFID II applies to firms, not personal trading. Crypto: MiCA regulation coming. Leverage restrictions on retail CFDs.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Key Regulatory Questions to Ask:</h3>
+            <ul>
+                <li>Are you trading your own money or others'? (Advisers Act, fund registration)</li>
+                <li>Does your strategy constitute a "security" or "derivative"? (Product regulation)</li>
+                <li>Are you crossing borders? (Jurisdictional issues)</li>
+                <li>What are the tax implications? (Capital gains, income, reporting)</li>
+                <li>Does your broker have restrictions on automated trading? (Terms of service)</li>
+            </ul>
+        </section>
+
+        <!-- Red Flags -->
+        <section>
+            <h2>🚩 Red Flags: Signs Your Agent is Malfunctioning</h2>
+            <div class="checklist">
+                <div class="checklist-item">
+                    <span class="tag danger">CRITICAL</span>
+                    <span>Executing trades outside defined trading hours</span>
+                </div>
+                <div class="checklist-item">
+                    <span class="tag danger">CRITICAL</span>
+                    <span>Position sizes exceeding limits</span>
+                </div>
+                <div class="checklist-item">
+                    <span class="tag danger">CRITICAL</span>
+                    <span>Repeated identical trades (loop bug)</span>
+                </div>
+                <div class="checklist-item">
+                    <span class="tag warning">WARNING</span>
+                    <span>Unusual increase in trade frequency</span>
+                </div>
+                <div class="checklist-item">
+                    <span class="tag warning">WARNING</span>
+                    <span>Consistent losses on a previously profitable strategy</span>
+                </div>
+                <div class="checklist-item">
+                    <span class="tag warning">WARNING</span>
+                    <span>API errors or rate limit warnings</span>
+                </div>
+                <div class="checklist-item">
+                    <span class="tag warning">WARNING</span>
+                    <span>Agent making "confident" statements about uncertain data</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Emergency Procedures -->
+        <section>
+            <h2>🚨 Emergency Procedures</h2>
+            
+            <h3>If Your Agent Goes Rogue:</h3>
+            <ol>
+                <li><strong>Immediately</strong> send kill switch command (/killswitch HALT)</li>
+                <li><strong>If that fails:</strong> Log into broker/exchange directly and cancel all open orders</li>
+                <li><strong>Revoke API keys</strong> in your broker/exchange account settings</li>
+                <li><strong>Stop the OpenClaw Gateway:</strong> <code>openclaw gateway stop</code></li>
+                <li><strong>Review logs</strong> to understand what went wrong</li>
+                <li><strong>Do NOT restart</strong> until you've identified and fixed the root cause</li>
+            </ol>
+
+            <h3>Emergency Contacts to Have Ready:</h3>
+            <ul>
+                <li>Broker/exchange support phone number (not just email)</li>
+                <li>API kill switch command (memorized or in secure location)</li>
+                <li>Backup internet connection (in case primary fails during emergency)</li>
+            </ul>
+        </section>
+
+        <!-- Insurance & Liability -->
+        <section>
+            <h2>📋 Insurance & Liability Considerations</h2>
+            <p><strong>Hard truth:</strong> If your agent loses money due to a bug, you have no recourse. This is your responsibility.</p>
+            
+            <ul>
+                <li><strong>Broker SIPC insurance</strong> (US) covers broker failure, NOT trading losses</li>
+                <li><strong>Exchange insurance</strong> (crypto) varies widely, often limited</li>
+                <li><strong>Personal insurance</strong> typically does NOT cover algorithmic trading losses</li>
+                <li><strong>Legal liability</strong> if your agent affects market prices or trades on material non-public information</li>
+            </ul>
+
+            <div class="critical-box">
+                <h4>💡 Bottom Line</h4>
+                <ul>
+                    <li>Only risk money you can afford to lose</li>
+                    <li>Start small, scale gradually</li>
+                    <li>Paper trade extensively</li>
+                    <li>Monitor actively, especially in early days</li>
+                    <li>Accept that bugs WILL happen</li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="last-updated" style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin: 2rem 0; padding-top: 2rem; border-top: 1px solid var(--border);">
+            Last updated: <strong>2026-03-29</strong> | 
+            <a href="index.html" style="color: var(--primary);">← Back to Home</a> |
+            This is NOT legal or financial advice
+        </div>
+    </main>
+
+    <footer>
+        <p>Built with 🦞 | <a href="https://docs.openclaw.ai">OpenClaw Docs</a> | <a href="https://discord.gg/clawd">Discord</a></p>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+            ⚠️ Not financial or legal advice. You are solely responsible for your trading decisions and regulatory compliance.
+        </p>
+    </footer>
+</body>
+</html>

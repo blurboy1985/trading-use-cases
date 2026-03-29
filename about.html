@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | OpenClaw Trading</title>
+    <meta name="description" content="Methodology, disclaimers, and contribution guide for OpenClaw Trading Use Cases">
+    <style>
+        :root {
+            --primary: #ff6b35; --primary-dark: #e55a2b; --secondary: #1a1a2e;
+            --accent: #00d9ff; --bg: #0f0f1a; --bg-card: #16162a;
+            --text: #e8e8f0; --text-muted: #a0a0b0; --border: #2a2a4a;
+            --success: #00ff88; --warning: #ffaa00; --danger: #ff4466;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg); color: var(--text); line-height: 1.6;
+        }
+        .risk-banner {
+            background: linear-gradient(135deg, #2a1a1a 0%, #1a1a2e 100%);
+            border-bottom: 2px solid var(--danger); padding: 1rem; text-align: center;
+        }
+        .risk-banner strong { color: var(--danger); text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
+        header {
+            background: var(--secondary); padding: 2rem 1rem; text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        header h1 {
+            font-size: 2rem; margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        nav {
+            background: var(--bg-card); padding: 1rem; position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+        nav ul { display: flex; justify-content: center; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+        nav a { color: var(--text); text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; }
+        nav a:hover, nav a.active { background: var(--primary); color: white; }
+        main { max-width: 900px; margin: 0 auto; padding: 2rem 1rem; }
+        section { margin-bottom: 3rem; }
+        h2 {
+            font-size: 1.6rem; margin-bottom: 1.25rem; padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border);
+        }
+        h3 { font-size: 1.2rem; margin: 1.5rem 0 0.75rem; color: var(--text); }
+        p { color: var(--text-muted); margin-bottom: 1rem; }
+        ul, ol { color: var(--text-muted); margin-bottom: 1rem; padding-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        .card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+            padding: 1.5rem; margin: 1rem 0;
+        }
+        .warning-box {
+            background: rgba(255, 68, 102, 0.1); border: 1px solid var(--danger);
+            border-radius: 8px; padding: 1rem; margin: 1.5rem 0;
+        }
+        .warning-box strong { color: var(--danger); display: block; margin-bottom: 0.5rem; }
+        code {
+            background: #0d0d1a; padding: 0.2rem 0.5rem; border-radius: 4px;
+            font-family: 'Monaco', 'Consolas', monospace; font-size: 0.9em; color: var(--accent);
+        }
+        footer {
+            background: var(--secondary); padding: 2rem 1rem; text-align: center;
+            border-top: 1px solid var(--border); margin-top: 3rem;
+        }
+        footer a { color: var(--primary); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="risk-banner">
+        <strong>⚠️ NOT Financial Advice</strong>
+        <p>Educational purposes only. Paper trade first. You are responsible for compliance with regulations.</p>
+    </div>
+
+    <header>
+        <h1>📖 About This Project</h1>
+        <p>Methodology, disclaimers, and how to contribute</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="catalogue.html">Catalogue</a></li>
+            <li><a href="about.html" class="active">About</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section>
+            <h2>🎯 Purpose</h2>
+            <p>
+                This catalogue documents real-world deployments of OpenClaw AI agents for trading and financial automation.
+                Our goal is to help the community learn from each other's experiences, avoid common pitfalls, and build
+                better trading systems together.
+            </p>
+        </section>
+
+        <section>
+            <h2>📊 Methodology</h2>
+            <div class="card">
+                <h3>How We Collect Use Cases</h3>
+                <ol>
+                    <li><strong>Community submissions</strong> via GitHub, Discord, and direct contributions</li>
+                    <li><strong>Verified deployments</strong> require proof of operation (screenshots, logs, or public demo)</li>
+                    <li><strong>Pattern documentation</strong> for common setups seen across multiple users</li>
+                    <li><strong>Research</strong> from OpenClaw docs, showcase, and community forums</li>
+                </ol>
+            </div>
+            <div class="card">
+                <h3>Data Fields Captured</h3>
+                <p>Each use case includes 15+ fields: who, trading style, agent setup, what it does, data sources,
+                broker integration, financial impact, risk controls, skills used, infrastructure, monthly cost,
+                regulatory notes, gotchas/failures, source URL, and verification status.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>⚠️ Critical Disclaimers</h2>
+            <div class="warning-box">
+                <strong>🚨 NOT Financial Advice</strong>
+                <p>Nothing in this catalogue constitutes financial advice, investment recommendations, or trading signals.
+                All use cases are for educational purposes only. You are solely responsible for your trading decisions.</p>
+            </div>
+            <div class="warning-box">
+                <strong>💸 Financial Risk Warning</strong>
+                <p>Automated trading carries substantial risk of loss. Past performance does not guarantee future results.
+                Never deploy real capital without extensive paper trading (minimum 3 months). Only risk money you can afford to lose.</p>
+            </div>
+            <div class="warning-box">
+                <strong>⚖️ Regulatory Compliance</strong>
+                <p>You are responsible for understanding and complying with securities regulations in your jurisdiction
+                (SEC, MAS, FCA, ESMA, etc.). Managing others' money may require licensing. This is not legal advice.</p>
+            </div>
+            <div class="warning-box">
+                <strong>🤖 AI Limitations</strong>
+                <p>AI agents WILL hallucinate financial data. Always verify critical information against primary sources.
+                Never give an agent withdrawal permissions. Always implement kill switches and human approval gates.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>🤝 How to Contribute</h2>
+            <div class="card">
+                <h3>Submit a Use Case</h3>
+                <ol>
+                    <li>Fork the repository on GitHub</li>
+                    <li>Add your use case to <code>data/usecases.json</code> following the schema</li>
+                    <li>Include all 15+ fields with honest, accurate information</li>
+                    <li>Set <code>verified: true</code> only if you're actively running this</li>
+                    <li>Submit a pull request with clear description</li>
+                </ol>
+            </div>
+            <div class="card">
+                <h3>Improve Existing Entries</h3>
+                <p>See errors, outdated info, or missing gotchas? Submit a PR with corrections. Include sources when possible.</p>
+            </div>
+            <div class="card">
+                <h3>Report Issues</h3>
+                <p>Found a bug, broken link, or inaccurate information? Open a GitHub issue with details.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>📈 Project Stats</h2>
+            <div class="card" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; text-align: center;">
+                <div>
+                    <div style="font-size: 2rem; color: var(--primary); font-weight: bold;" id="statUseCases">-</div>
+                    <div style="color: var(--text-muted);">Use Cases</div>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; color: var(--success); font-weight: bold;" id="statVerified">-</div>
+                    <div style="color: var(--text-muted);">Verified</div>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; color: var(--accent); font-weight: bold;" id="statCategories">-</div>
+                    <div style="color: var(--text-muted);">Categories</div>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; color: var(--warning); font-weight: bold;" id="statSources">-</div>
+                    <div style="color: var(--text-muted);">Data Sources</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>🔗 Resources</h2>
+            <ul>
+                <li><a href="https://docs.openclaw.ai" style="color: var(--primary);">OpenClaw Documentation</a></li>
+                <li><a href="https://github.com/openclaw/openclaw" style="color: var(--primary);">OpenClaw GitHub</a></li>
+                <li><a href="https://discord.gg/clawd" style="color: var(--primary);">OpenClaw Discord</a></li>
+                <li><a href="https://clawhub.ai" style="color: var(--primary);">ClawHub Skills</a></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>📄 License</h2>
+            <p>MIT License — Feel free to use, modify, and distribute. Attribution appreciated but not required.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>Built with 🦞 by the OpenClaw Community</p>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+            ⚠️ Not financial or legal advice. Trading involves substantial risk. You are responsible for your own decisions.
+        </p>
+    </footer>
+
+    <script>
+        // Load stats
+        Promise.all([
+            fetch('data/usecases.json').then(r => r.json()),
+            fetch('data/data-sources.json').then(r => r.json())
+        ]).then(([usecases, sources]) => {
+            document.getElementById('statUseCases').textContent = usecases.length;
+            document.getElementById('statVerified').textContent = usecases.filter(u => u.verified).length;
+            document.getElementById('statCategories').textContent = [...new Set(usecases.map(u => u.category))].length;
+            document.getElementById('statSources').textContent = sources.length;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Monitoring | OpenClaw Trading</title>
+    <style>
+        :root { --primary: #ff6b35; --secondary: #1a1a2e; --accent: #00d9ff; --bg: #0f0f1a; --bg-card: #16162a; --text: #e8e8f0; --text-muted: #a0a0b0; --border: #2a2a4a; --success: #00ff88; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        .risk-banner { background: linear-gradient(135deg, #2a1a1a, #1a1a2e); border-bottom: 2px solid #ff4466; padding: 1rem; text-align: center; }
+        .risk-banner strong { color: #ff4466; text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
+        header { background: var(--secondary); padding: 2rem 1rem; text-align: center; border-bottom: 1px solid var(--border); }
+        header h1 { font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        nav { background: var(--bg-card); padding: 1rem; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); }
+        nav ul { display: flex; justify-content: center; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+        nav a { color: var(--text); text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; }
+        nav a:hover, nav a.active { background: var(--primary); color: white; }
+        main { max-width: 1000px; margin: 0 auto; padding: 2rem 1rem; }
+        section { margin-bottom: 3rem; }
+        h2 { font-size: 1.5rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border); }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+        .tag { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem; background: var(--secondary); color: var(--accent); border: 1px solid var(--border); margin-right: 0.5rem; }
+        .tag.verified { background: rgba(0, 255, 136, 0.15); color: var(--success); }
+        code { background: #0d0d1a; padding: 0.2rem 0.5rem; border-radius: 4px; font-family: monospace; color: var(--accent); }
+        footer { background: var(--secondary); padding: 2rem 1rem; text-align: center; border-top: 1px solid var(--border); margin-top: 3rem; }
+        footer a { color: var(--primary); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="risk-banner"><strong>⚠️ NOT Financial Advice</strong>Informational purposes only. Always verify data before trading.</div>
+    <header><h1>📊 Market Monitoring & Alerts</h1><p>Real-time price tracking, volume spikes, and custom alerts</p></header>
+    <nav><ul><li><a href="index.html">Home</a></li><li><a href="market-monitoring.html" class="active">Market Monitoring</a></li><li><a href="analysis.html">Analysis</a></li><li><a href="portfolio.html">Portfolio</a></li><li><a href="automated-trading.html">Automated</a></li><li><a href="my-setup.html">My Setup</a></li></ul></nav>
+    <main>
+        <section>
+            <h2>Use Cases</h2>
+            <div class="card">
+                <h3>Real-Time Price Tracking</h3>
+                <p>Monitor multiple tickers across stocks, crypto, and forex with custom threshold alerts delivered via Telegram.</p>
+                <div class="tags"><span class="tag verified">✓ Zero Risk</span><span class="tag">Beginner</span></div>
+                <p><strong>Implementation:</strong> Use yfinance Python library with cron jobs every 15 minutes. Alert on ±3% price movement.</p>
+            </div>
+            <div class="card">
+                <h3>Volume Spike Detection</h3>
+                <p>Detect unusual trading volume spikes (2x+ average volume) and send immediate notifications.</p>
+                <div class="tags"><span class="tag verified">✓ Zero Risk</span><span class="tag">Intermediate</span></div>
+            </div>
+            <div class="card">
+                <h3>Earnings Calendar Tracker</h3>
+                <p>Track upcoming earnings dates with pre/post-earnings analysis delivered to chat.</p>
+                <div class="tags"><span class="tag">Zero Risk</span><span class="tag">Intermediate</span></div>
+            </div>
+        </section>
+        <section>
+            <h2>Sample Cron Schedule (SGT)</h2>
+            <pre style="background: #0d0d1a; padding: 1rem; border-radius: 8px; overflow-x: auto;"><code># SGX hours (9am-5pm SGT)
+*/15 9-16 * * 1-5 python price_alerts.py
+
+# US hours (9:30pm-4am SGT)
+*/15 21-23 * * 0-4 python price_alerts.py
+*/15 0-3 * * 1-5 python price_alerts.py</code></pre>
+        </section>
+        <div style="text-align: center; margin-top: 2rem;"><a href="index.html" style="color: var(--primary);">← Back to Home</a></div>
+    </main>
+    <footer><p>Built with 🦞 | <a href="https://docs.openclaw.ai">OpenClaw Docs</a></p></footer>
+</body>
+</html>

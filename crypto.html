@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto & DeFi | OpenClaw Trading</title>
+    <style>
+        :root { --primary: #ff6b35; --secondary: #1a1a2e; --accent: #00d9ff; --bg: #0f0f1a; --bg-card: #16162a; --text: #e8e8f0; --text-muted: #a0a0b0; --border: #2a2a4a; --danger: #ff4466; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        .risk-banner { background: linear-gradient(135deg, #2a1a1a, #1a1a2e); border-bottom: 2px solid var(--danger); padding: 1rem; text-align: center; }
+        header { background: var(--secondary); padding: 2rem 1rem; text-align: center; border-bottom: 1px solid var(--border); }
+        header h1 { font-size: 2rem; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        nav { background: var(--bg-card); padding: 1rem; position: sticky; top: 0; }
+        nav ul { display: flex; justify-content: center; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+        nav a { color: var(--text); text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; }
+        nav a:hover, nav a.active { background: var(--primary); color: white; }
+        main { max-width: 1000px; margin: 0 auto; padding: 2rem 1rem; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+        .critical { background: rgba(255, 68, 102, 0.15); border: 2px solid var(--danger); padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0; }
+        .tag { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem; background: rgba(255, 68, 102, 0.15); color: var(--danger); border: 1px solid var(--danger); }
+        footer { background: var(--secondary); padding: 2rem 1rem; text-align: center; border-top: 1px solid var(--border); margin-top: 3rem; }
+        footer a { color: var(--primary); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="risk-banner"><strong>⚠️ CRITICAL: Security First</strong>Never store private keys or seed phrases in workspace files. Use hardware wallets for significant amounts.</div>
+    <header><h1>₿ Crypto & DeFi</h1><p>DEX/CEX automation, wallet management, gas optimization</p></header>
+    <nav><ul><li><a href="index.html">Home</a></li><li><a href="crypto.html" class="active">Crypto</a></li><li><a href="risk.html">Risk</a></li></ul></nav>
+    <main>
+        <div class="critical">
+            <h3>🔒 Security Rules</h3>
+            <ul>
+                <li><strong>NEVER</strong> store private keys, seed phrases, or wallet passwords in workspace files</li>
+                <li><strong>Use trade-only API keys</strong> - disable withdrawal permissions</li>
+                <li><strong>Enable IP allowlists</strong> on all exchange API keys</li>
+                <li><strong>Use hardware wallets</strong> for significant amounts (Ledger, Trezor)</li>
+                <li><strong>Test with small amounts</strong> before deploying real capital</li>
+            </ul>
+        </div>
+        <section>
+            <h2>Use Cases</h2>
+            <div class="card"><h3>DCA Bot (Spot)</h3><p>Automated weekly/monthly BTC/ETH purchases. Simple, low-risk accumulation strategy.</p><span class="tag">⚠️ High Risk</span></div>
+            <div class="card"><h3>CEX Automation (Binance/Coinbase)</h3><p>API-based trading on centralized exchanges. Spot, futures, staking.</p><span class="tag">⚠️ High Risk</span></div>
+            <div class="card"><h3>DEX Trading (Uniswap)</h3><p>Smart contract interactions for token swaps. Requires Web3 integration.</p><span class="tag">⚠️ High Risk</span></div>
+            <div class="card"><h3>Gas Optimization</h3><p>Monitor gas prices, execute when below threshold. Save on transaction fees.</p><span class="tag">⚠️ Medium Risk</span></div>
+            <div class="card"><h3>DeFi Yield Monitoring</h3><p>Track APY across protocols, alert on changes or impermanent loss.</p><span class="tag">⚠️ Medium Risk</span></div>
+        </section>
+        <section>
+            <h2>Chain-Specific Considerations</h2>
+            <div class="card"><strong>EVM (Ethereum, BSC, Polygon):</strong> Use Web3.py, MetaMask integration, gas tracking essential</div>
+            <div class="card"><strong>Solana:</strong> Use @solana/web3.js, different wallet structure, faster/cheaper transactions</div>
+        </section>
+        <div style="text-align: center; margin-top: 2rem;"><a href="index.html" style="color: var(--primary);">← Back to Home</a> | <a href="risk.html" style="color: var(--primary);">Security Guide →</a></div>
+    </main>
+    <footer><p>Built with 🦞 | <a href="risk.html">Read Security Guide First</a></p></footer>
+</body>
+</html>

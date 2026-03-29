@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Management | OpenClaw Trading</title>
+    <style>
+        :root { --primary: #ff6b35; --secondary: #1a1a2e; --accent: #00d9ff; --bg: #0f0f1a; --bg-card: #16162a; --text: #e8e8f0; --text-muted: #a0a0b0; --border: #2a2a4a; --success: #00ff88; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        .risk-banner { background: linear-gradient(135deg, #2a1a1a, #1a1a2e); border-bottom: 2px solid #ff4466; padding: 1rem; text-align: center; }
+        header { background: var(--secondary); padding: 2rem 1rem; text-align: center; border-bottom: 1px solid var(--border); }
+        header h1 { font-size: 2rem; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        nav { background: var(--bg-card); padding: 1rem; position: sticky; top: 0; }
+        nav ul { display: flex; justify-content: center; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+        nav a { color: var(--text); text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; }
+        nav a:hover, nav a.active { background: var(--primary); color: white; }
+        main { max-width: 1000px; margin: 0 auto; padding: 2rem 1rem; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+        .tag { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem; background: rgba(0, 255, 136, 0.15); color: var(--success); border: 1px solid var(--success); margin-right: 0.5rem; }
+        footer { background: var(--secondary); padding: 2rem 1rem; text-align: center; border-top: 1px solid var(--border); margin-top: 3rem; }
+        footer a { color: var(--primary); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="risk-banner"><strong>⚠️ NOT Financial Advice</strong>Read-only APIs recommended for portfolio tracking.</div>
+    <header><h1>💼 Portfolio Management</h1><p>Performance tracking, allocation monitoring, and reporting</p></header>
+    <nav><ul><li><a href="index.html">Home</a></li><li><a href="portfolio.html" class="active">Portfolio</a></li><li><a href="my-setup.html">My Setup</a></li></ul></nav>
+    <main>
+        <section>
+            <h2>Use Cases (All Zero Risk - Read Only)</h2>
+            <div class="card"><h3>Portfolio Performance Dashboard</h3><p>Daily summary with P&L, allocation breakdown, top/bottom performers. Delivered via Telegram.</p><span class="tag">✓ Zero Risk</span></div>
+            <div class="card"><h3>Asset Allocation Rebalancer</h3><p>Monitor target allocations, alert when drift exceeds 5%, generate rebalancing trades.</p><span class="tag">✓ Zero Risk</span></div>
+            <div class="card"><h3>Dividend Tracker</h3><p>Track ex-dates, payment dates, yield calculations. Alert 3 days before ex-date.</p><span class="tag">✓ Zero Risk</span></div>
+            <div class="card"><h3>Tax-Loss Harvesting Scanner</h3><p>Identify positions with unrealized losses, suggest similar securities for swap.</p><span class="tag">⚡ Medium Risk</span></div>
+            <div class="card"><h3>Multi-Account Aggregator</h3><p>Consolidate holdings across brokers, crypto exchanges, retirement accounts.</p><span class="tag">✓ Zero Risk</span></div>
+        </section>
+        <section>
+            <h2>Notion Integration</h2>
+            <p>Sync portfolio data to Notion databases for visualization and historical tracking. See <a href="my-setup.html" style="color: var(--primary);">My Setup</a> for implementation details.</p>
+        </section>
+        <div style="text-align: center; margin-top: 2rem;"><a href="index.html" style="color: var(--primary);">← Back to Home</a></div>
+    </main>
+    <footer><p>Built with 🦞</p></footer>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical & Fundamental Analysis | OpenClaw Trading</title>
+    <style>
+        :root { --primary: #ff6b35; --secondary: #1a1a2e; --accent: #00d9ff; --bg: #0f0f1a; --bg-card: #16162a; --text: #e8e8f0; --text-muted: #a0a0b0; --border: #2a2a4a; --success: #00ff88; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        .risk-banner { background: linear-gradient(135deg, #2a1a1a, #1a1a2e); border-bottom: 2px solid #ff4466; padding: 1rem; text-align: center; }
+        header { background: var(--secondary); padding: 2rem 1rem; text-align: center; border-bottom: 1px solid var(--border); }
+        header h1 { font-size: 2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        nav { background: var(--bg-card); padding: 1rem; position: sticky; top: 0; z-index: 100; }
+        nav ul { display: flex; justify-content: center; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+        nav a { color: var(--text); text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; }
+        nav a:hover, nav a.active { background: var(--primary); color: white; }
+        main { max-width: 1000px; margin: 0 auto; padding: 2rem 1rem; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+        .tag { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem; background: var(--secondary); color: var(--accent); border: 1px solid var(--border); margin-right: 0.5rem; }
+        .tag.verified { background: rgba(0, 255, 136, 0.15); color: var(--success); }
+        footer { background: var(--secondary); padding: 2rem 1rem; text-align: center; border-top: 1px solid var(--border); margin-top: 3rem; }
+        footer a { color: var(--primary); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="risk-banner"><strong>⚠️ NOT Financial Advice</strong>AI can hallucinate data. Always verify before trading.</div>
+    <header><h1>📈 Technical & Fundamental Analysis</h1><p>AI-powered chart analysis, indicators, and research</p></header>
+    <nav><ul><li><a href="index.html">Home</a></li><li><a href="analysis.html" class="active">Analysis</a></li><li><a href="portfolio.html">Portfolio</a></li><li><a href="risk.html">Risk</a></li></ul></nav>
+    <main>
+        <section>
+            <h2>⭐ Verified: TradingView Chart Analysis</h2>
+            <div class="card" style="border-color: var(--success);">
+                <h3>TradingView Browser Automation</h3>
+                <p><strong>By @bheem1798</strong> — Agent logs into TradingView via browser automation, captures chart screenshots, and performs technical analysis on demand.</p>
+                <div class="tags"><span class="tag verified">✓ Verified</span><span class="tag">Technical Analysis</span></div>
+                <p><strong>Impact:</strong> Saves ~5 hours/week on manual chart analysis</p>
+                <p><strong>Setup:</strong> Single agent with browser automation and vision analysis skills</p>
+            </div>
+        </section>
+        <section>
+            <h2>Technical Analysis Use Cases</h2>
+            <div class="card"><h3>RSI + MACD Scanner</h3><p>Scan watchlist for oversold/overbought conditions with momentum confirmation.</p></div>
+            <div class="card"><h3>Pattern Recognition</h3><p>Detect head & shoulders, double tops/bottoms, triangles, and breakouts.</p></div>
+            <div class="card"><h3>Moving Average Crossover</h3><p>Monitor 50/200 golden cross, 9/21 EMA crossovers for trend changes.</p></div>
+        </section>
+        <section>
+            <h2>Fundamental Analysis Use Cases</h2>
+            <div class="card"><h3>SEC Filing Analyzer</h3><p>Automated 10-K, 10-Q analysis with key metric extraction.</p></div>
+            <div class="card"><h3>Earnings Transcript Summarizer</h3><p>Process earnings calls, extract sentiment and guidance changes.</p></div>
+            <div class="card"><h3>Financial Ratio Comparator</h3><p>Calculate P/E, PEG, ROE vs industry peers.</p></div>
+        </section>
+        <div style="text-align: center; margin-top: 2rem;"><a href="index.html" style="color: var(--primary);">← Back to Home</a></div>
+    </main>
+    <footer><p>Built with 🦞 | <a href="https://docs.openclaw.ai">OpenClaw Docs</a></p></footer>
+</body>
+</html>
